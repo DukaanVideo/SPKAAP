@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahakal Puzzle Battle - Gaming Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0f172a;
+            color: #ffffff;
+            min-height: 100vh;
+        }
+        /* Top Navigation Bar */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background-color: #1e293b;
+            border-bottom: 1px solid #334155;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #f59e0b;
+        }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-download {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .auth-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        .btn-login, .btn-signup {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-login {
+            background: transparent;
+            border: 1px solid #3b82f6;
+            color: #3b82f6;
+        }
+        .btn-signup {
+            background-color: #3b82f6;
+            border: none;
+            color: white;
+        }
+
+        /* Main Container */
+        .container {
+            padding: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Banner Section */
+        .banner {
+            background: linear-gradient(135deg, #1e293b, #334155);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 1px solid #475569;
+        }
+        .banner h2 {
+            font-size: 18px;
+            color: #f59e0b;
+            margin-bottom: 8px;
+        }
+        .banner p {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        /* Games Grid Section (Future proof layout) */
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #e2e8f0;
+            border-left: 4px solid #f59e0b;
+            padding-left: 8px;
+        }
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .game-card {
+            background-color: #1e293b;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #334155;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .game-card:active {
+            transform: scale(0.98);
+        }
+        .game-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        .game-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        /* Modals (Login / Signup / OTP) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .modal-content {
+            background-color: #1e293b;
+            padding: 24px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid #475569;
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+        .modal-content h3 {
+            margin-bottom: 16px;
+            font-size: 18px;
+            color: #f59e0b;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 4px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            color: white;
+            font-size: 14px;
+        }
+        .btn-submit {
+            width: 100%;
+            background-color: #f59e0b;
+            color: #0f172a;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        .switch-text {
+            text-align: center;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 12px;
+            cursor: pointer;
+        }
+        .switch-text span {
+            color: #3b82f6;
+            font-weight: bold;
+        }
+
+        /* User Profile Dashboard View (Hidden by default unless logged in) */
+        #dashboard-view {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="logo">Mahakal Gaming</div>
+        <div class="nav-right">
+            <button class="btn-download" onclick="alert('App download shuru ho rahi hai!')">Download App</button>
+            <div class="auth-buttons" id="auth-buttons-container">
+                <button class="btn-login" onclick="openModal('loginModal')">LOGIN</button>
+                <button class="btn-signup" onclick="openModal('signupModal')">SIGN UP</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main App Content -->
+    <div class="container">
+        
+        <!-- Guest / Public View -->
+        <div id="guest-view">
+            <div class="banner">
+                <h2>Mahakal Puzzle Battle</h2>
+                <p>Khele naye puzzles aur jeetein exciting rewards! Naye games jaldi judne wale hain.</p>
+            </div>
+
+            <div class="section-title">Available Games</div>
+            <div class="games-grid">
+                <div class="game-card" onclick="checkAuthAndPlay('Mahakal Puzzle')">
+                    <div class="game-icon">🔱</div>
+                    <div class="game-name">Mahakal Puzzle</div>
+                </div>
+                <!-- Future games can be added easily right here line by line -->
+                <div class="game-card" onclick="checkAuthAndPlay('Coming Soon Game 2')">
+                    <div class="game-icon">🎮</div>
+                    <div class="game-name">Coming Soon</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logged In Dashboard View -->
+        <div id="dashboard-view">
+            <div class="banner">
+                <h2 id="welcomeUserMsg">Swagat hai, User!</h2>
+                <p>Aapka account active hai. Niche diye gaye games mein se koi bhi khelein.</p>
+                <button onclick="logoutUser()" style="margin-top: 10px; background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Logout</button>
+            </div>
+
+            <div class="section-title">Aapke Games</div>
+            <div class="games-grid">
+                <div class="game-card" onclick="alert('Game start ho raha hai!')">
+                    <div class="game-icon">🔱</div>
+                    <div class="game-name">Mahakal Puzzle</div>
+                </div>
+                <!-- Future games addition slot -->
+                <div class="game-card" onclick="alert('Naya game jald aayega!')">
+                    <div class="game-icon">🚀</div>
+                    <div class="game-name">Future Game Slot</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('loginModal')">&times;</span>
+            <h3>Login Karein</h3>
+            <div class="form-group">
+                <label>Mobile Number</label>
+                <input type="tel5" id="loginPhone" placeholder=" Apna mobile number daalein">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder=" Apna password daalein">
+            </div>
+            <button class="btn-submit" onclick="handleLogin()">Login Karein</button>
+            <div class="switch-text" onclick="switchToSignup()">Naya account nahi hai? <span>Sign Up karein</span></div>
+        </div>
+    </div>
+
+    <!-- Signup Modal (Step 1: Mobile & OTP) -->
+    <div class="modal" id="signupModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('signupModal')">&times;</span>
+            <h3>Naya Account banayein</h3>
+            <div class="form-group">
+                <label>Mobile Number</label>
+                <input type="tel" id="signupPhone" placeholder="Mobile number daalein">
+            </div>
+            <button class="btn-submit" onclick="sendOTP()">OTP Bhejein</button>
+            
+            <div id="otpSection" style="display: none; margin-top: 12px;">
+                <div class="form-group">
+                    <label>OTP Daalein (Demo OTP: 1234)</label>
+                    <input type="text" id="otpInput" placeholder="4 digit OTP">
+                </div>
+                <div class="form-group">
+                    <label>Naya Password Banayein</label>
+                    <input type="password" id="signupPassword" placeholder="Password daalein">
+                </div>
+                <button class="btn-submit" onclick="verifyAndRegister()">Verify & Register</button>
+            </div>
+
+            <div class="switch-text" onclick="switchToLogin()">Pehle se account hai? <span>Login karein</span></div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic for Session & Auth -->
+    <script>
+        // Check if user is already logged in (Auto Login Session)
+        window.onload = function() {
+            const savedUser = localStorage.getItem('mahakal_user');
+            if (savedUser) {
+                showDashboard(savedUser);
+            }
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function switchToSignup() {
+            closeModal('loginModal');
+            openModal('signupModal');
+        }
+
+        function switchToLogin() {
+            closeModal('signupModal');
+            openModal('loginModal');
+        }
+
+        // Signup OTP simulation
+        function sendOTP() {
+            const phone = document.getElementById('signupPhone').value;
+            if(phone.length < 10) {
+                alert('Kripya sahi mobile number daalein!');
+                return;
+            }
+            alert('OTP bhej diya gaya hai! (Demo OTP: 1234)');
+            document.getElementById('otpSection').style.display = 'block';
+        }
+
+        function verifyAndRegister() {
+            const otp = document.getElementById('otpInput').value;
+            const phone = document.getElementById('signupPhone').value;
+            const password = document.getElementById('signupPassword').value;
+
+            if(otp === '1234' && password.length > 0) {
+                localStorage.setItem('mahakal_user', phone);
+                alert('Account safalpurvak ban gaya!');
+                closeModal('signupModal');
+                showDashboard(phone);
+            } else {
+                alert('Galat OTP ya password! Dobara koshish karein.');
+            }
+        }
+
+        // Login handling
+        function handleLogin() {
+            const phone = document.getElementById('loginPhone').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if(phone.length >= 10 && password.length > 0) {
+                localStorage.setItem('mahakal_user', phone);
+                alert('Login safal raha!');
+                closeModal('loginModal');
+                showDashboard(phone);
+            } else {
+                alert('Kripya sahi details bharein.');
+            }
+        }
+
+        function showDashboard(phone) {
+            document.getElementById('guest-view').style.display = 'none';
+            document.getElementById('dashboard-view').style.display = 'block';
+            document.getElementById('auth-buttons-container').style.display = 'none';
+            document.getElementById('welcomeUserMsg').innerText = 'Swagat hai, ' + phone + '!';
+        }
+
+        function logoutUser() {
+            localStorage.removeItem('mahakal_user');
+            document.getElementById('guest-view').style.display = 'block';
+            document.getElementById('dashboard-view').style.display = 'none';
+            document.getElementById('auth-buttons-container').style.display = 'flex';
+        }
+
+        function checkAuthAndPlay(gameName) {
+            const savedUser = localStorage.getItem('mahakal_user');
+            if (!savedUser) {
+                alert('Kripya pehle Login ya Sign Up karein!');
+                openModal('loginModal');
+            } else {
+                alert(gameName + ' load ho raha hai. Khelne ke liye taiyar ho jayein!');
+            }
+        }
+    </script>
+</body>
+</html>
