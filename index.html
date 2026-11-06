@@ -24,7 +24,7 @@
         .wallet-card .balance { font-size: 26px; font-weight: bold; color: #fff; }
         .section-title { font-size: 15px; font-weight: bold; margin-bottom: 12px; color: #e2e8f0; border-left: 4px solid #f59e0b; padding-left: 8px; }
         
-        /* Alag-alag saaf buttons/cards grid */
+        /* Menu Grid */
         .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
         .menu-card { background-color: #1e293b; border-radius: 10px; padding: 16px; text-align: center; border: 1px solid #334155; cursor: pointer; transition: 0.2s; }
         .menu-card:active { transform: scale(0.98); }
@@ -76,7 +76,7 @@
             </div>
         </div>
 
-        <!-- Dashboard View (After Login) - Sabhi options bahar alag-alag dikhenge -->
+        <!-- Dashboard View (After Login) -->
         <div id="dashboard-view">
             <div class="banner">
                 <h2 id="welcomeUserMsg">Swagat hai, User!</h2>
@@ -97,32 +97,26 @@
                     <div class="menu-name">QR Deposit</div>
                 </div>
 
-                <!-- 2. Bank Deposit Button -->
-                <div class="menu-card" onclick="window.location.href='bank-deposit.html'">
-                    <div class="menu-icon">🏦</div>
-                    <div class="menu-name">Bank Deposit</div>
-                </div>
-
-                <!-- 3. Withdrawal Button -->
+                <!-- 2. Withdrawal Button -->
                 <div class="menu-card" onclick="window.location.href='withdrawal.html'">
                     <div class="menu-icon">📤</div>
                     <div class="menu-name">Withdrawal</div>
                 </div>
 
-                <!-- 4. Play Game Button -->
+                <!-- 3. Play Game Button -->
                 <div class="menu-card" onclick="window.location.href='aviator.html'">
                     <div class="menu-icon">✈️</div>
                     <div class="menu-name">Play Aviator</div>
                 </div>
 
-                <!-- 5. Helpline Support Button -->
+                <!-- 4. Helpline Support Button -->
                 <div class="menu-card" onclick="window.location.href='support.html'">
                     <div class="menu-icon">💬</div>
                     <div class="menu-name">Helpline Support</div>
                 </div>
             </div>
 
-            <!-- 6. Logout Button (Bahar alag se saaf) -->
+            <!-- Logout Button -->
             <button class="btn-logout-full" onclick="logoutUser()">Logout (Khatam Session)</button>
         </div>
     </div>
