@@ -44,11 +44,11 @@
         .btn-pm:active { background: #334155; }
         .input-box-group input { width: 100%; padding: 8px; background: transparent; border: none; color: white; font-size: 15px; text-align: center; font-weight: bold; outline: none; }
 
-        .btn-place-bet { background-color: #facc15; color: #000000; border: none; padding: 12px 16px; font-size: 15px; font-weight: bold; border-radius: 8px; cursor: pointer; flex: 1; transition: 0.2s; }
+        .btn-place-bet { background-color: #facc15; color: #000000; border: none; padding: 12px 16px; font-size: 14px; font-weight: bold; border-radius: 8px; cursor: pointer; flex: 1; transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .btn-place-bet.cashout { background-color: #ef4444; color: #ffffff; }
         .btn-place-bet:disabled { background-color: #334155; color: #94a3b8; cursor: not-allowed; }
 
-        /* Quick Amount Shortcuts (200, 1000, 10000, Max) */
+        /* Quick Amount Shortcuts */
         .shortcuts-row { display: flex; gap: 6px; }
         .shortcut-btn { flex: 1; background: #1e293b; border: 1px solid #334155; color: #cbd5e1; font-size: 11px; padding: 4px; border-radius: 4px; cursor: pointer; text-align: center; }
         .shortcut-btn:active { background: #334155; }
@@ -84,7 +84,7 @@
 
     <div class="main-container">
         
-        <!-- Game Screen with Canvas Jet -->
+        <!-- Game Screen with Real Jet Canvas -->
         <div class="game-screen">
             <div class="multiplier-display" id="multiplierDisplay">1.00x</div>
             <div class="status-display" id="statusDisplay">Next round starting in 15s...</div>
@@ -193,7 +193,7 @@
             document.getElementById('betInput' + boxNum).value = amount;
         }
 
-        // Canvas Jet Animation
+        // Canvas Realistic Jet Animation
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
@@ -210,34 +210,79 @@
         let currentMultiplier = 1.00;
         let countdownTime = 15;
 
-        let bet1State = 'NONE'; // NONE, PLACED, CASHED
+        let bet1State = 'NONE'; 
         let bet2State = 'NONE';
         let bet1Amount = 0;
         let bet2Amount = 0;
 
-        function drawJetScene(progressRatio, isCrashed = false) {
+        function drawRealisticJet(x, y, angle, isCrashed) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(angle);
+
+            // Flame / Exhaust tail
+            if (!isCrashed) {
+                ctx.fillStyle = '#f97316';
+                ctx.beginPath();
+                ctx.moveTo(-18, 0);
+                ctx.lineTo(-30, -5);
+                ctx.lineTo(-25, 0);
+                ctx.lineTo(-30, 5);
+                ctx.closePath();
+                ctx.fill();
+            }
+
+            // Main Yellow & Black Jet Body (Asli Jet Shape)
+            ctx.fillStyle = isCrashed ? '#ef4444' : '#facc15';
+            ctx.beginPath();
+            ctx.moveTo(22, 0);
+            ctx.lineTo(-12, -8);
+            ctx.lineTo(-6, -2);
+            ctx.lineTo(-16, -2);
+            ctx.lineTo(-20, -7);
+            ctx.lineTo(-14, 0);
+            ctx.lineTo(-20, 7);
+            ctx.lineTo(-16, 2);
+            ctx.lineTo(-6, 2);
+            ctx.lineTo(-12, 8);
+            ctx.closePath();
+            ctx.fill();
+
+            // Black accent stripes on wings
+            ctx.fillStyle = '#000000';
+            ctx.beginPath();
+            ctx.moveTo(4, 0);
+            ctx.lineTo(-8, -4);
+            ctx.lineTo(-4, 0);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        function drawScene(progressRatio, isCrashed = false) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // Background grid lines
-            ctx.strokeStyle = 'rgba(59, 130, 246, 0.08)';
+            ctx.strokeStyle = 'rgba(59, 130, 246, 0.1)';
             ctx.lineWidth = 1;
-            for (let i = 0; i < canvas.width; i += 30) {
+            for (let i = 0; i < canvas.width; i += 35) {
                 ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
             }
-            for (let j = 0; j < canvas.height; j += 30) {
+            for (let j = 0; j < canvas.height; j += 35) {
                 ctx.beginPath(); ctx.moveTo(0, j); ctx.lineTo(canvas.width, j); ctx.stroke();
             }
 
-            let startX = 30;
-            let startY = canvas.height - 30;
-            let endX = canvas.width - 50;
-            let endY = 40;
+            let startX = 35;
+            let startY = canvas.height - 35;
+            let endX = canvas.width - 60;
+            let endY = 45;
 
             let currentX = startX + (endX - startX) * progressRatio;
             let currentY = startY - (startY - endY) * progressRatio;
 
             if (gameState === 'FLYING' || isCrashed) {
-                // Flight curve line
+                // Flight curve line & gradient fill
                 ctx.beginPath();
                 ctx.moveTo(startX, startY);
                 ctx.quadraticCurveTo(canvas.width * 0.4, canvas.height - 20, currentX, currentY);
@@ -245,44 +290,14 @@
                 ctx.lineWidth = 3;
                 ctx.stroke();
 
-                // Draw Jet Fighter Icon (Yellow & Black)
-                ctx.save();
-                ctx.translate(currentX, currentY);
-                ctx.rotate(isCrashed ? 0.8 : -0.3);
-
-                // Jet body
-                ctx.fillStyle = isCrashed ? '#ef4444' : '#facc15';
-                ctx.beginPath();
-                ctx.moveTo(18, 0);
-                ctx.lineTo(-14, -7);
-                ctx.lineTo(-8, 0);
-                ctx.lineTo(-14, 7);
-                ctx.closePath();
+                ctx.lineTo(currentX, canvas.height - 35);
+                ctx.lineTo(startX, canvas.height - 35);
+                ctx.fillStyle = 'rgba(250, 204, 21, 0.12)';
                 ctx.fill();
 
-                // Jet nose / cockpit accent
-                ctx.fillStyle = '#000000';
-                ctx.beginPath();
-                ctx.moveTo(18, 0);
-                ctx.lineTo(8, -2);
-                ctx.lineTo(8, 2);
-                ctx.closePath();
-                ctx.fill();
-
-                ctx.restore();
+                drawRealisticJet(currentX, currentY, isCrashed ? 0.7 : -0.32, isCrashed);
             } else {
-                // Resting Jet at bottom-left corner
-                ctx.save();
-                ctx.translate(startX, startY);
-                ctx.fillStyle = '#facc15';
-                ctx.beginPath();
-                ctx.moveTo(18, 0);
-                ctx.lineTo(-14, -7);
-                ctx.lineTo(-8, 0);
-                ctx.lineTo(-14, 7);
-                ctx.closePath();
-                ctx.fill();
-                ctx.restore();
+                drawRealisticJet(startX, startY, 0, false);
             }
         }
 
@@ -298,7 +313,7 @@
             currentMultiplier = 1.00;
 
             document.getElementById('multiplierDisplay').innerText = "1.00x";
-            drawJetScene(0);
+            drawScene(0);
 
             let b1 = document.getElementById('btnBet1');
             let b2 = document.getElementById('btnBet2');
@@ -346,7 +361,7 @@
 
             let b1 = document.getElementById('btnBet1');
             if (bet1State === 'PLACED') {
-                b1.innerText = "CASH OUT";
+                b1.innerHTML = `CASH OUT<br><span style="font-size:11px;">Win ₹${bet1Amount}</span>`;
                 b1.className = "btn-place-bet cashout";
                 b1.disabled = false;
             } else {
@@ -356,7 +371,7 @@
 
             let b2 = document.getElementById('btnBet2');
             if (bet2State === 'PLACED') {
-                b2.innerText = "CASH OUT";
+                b2.innerHTML = `CASH OUT<br><span style="font-size:11px;">Win ₹${bet2Amount}</span>`;
                 b2.className = "btn-place-bet cashout";
                 b2.disabled = false;
             } else {
@@ -374,7 +389,17 @@
                 let ratio = (currentMultiplier - 1.00) / (targetCrash - 1.00);
                 if (ratio > 1) ratio = 1;
 
-                drawJetScene(ratio);
+                drawScene(ratio);
+
+                // Live Win Amount Update on Buttons
+                if (bet1State === 'PLACED') {
+                    let liveWin1 = Math.floor(bet1Amount * currentMultiplier);
+                    b1.innerHTML = `CASH OUT<br><span style="font-size:12px; font-weight:bold;">₹ ${liveWin1}</span>`;
+                }
+                if (bet2State === 'PLACED') {
+                    let liveWin2 = Math.floor(bet2Amount * currentMultiplier);
+                    b2.innerHTML = `CASH OUT<br><span style="font-size:12px; font-weight:bold;">₹ ${liveWin2}</span>`;
+                }
 
                 // Auto Cashout Check Box 1
                 if (bet1State === 'PLACED' && document.getElementById('autoCashCheck1').checked) {
@@ -404,7 +429,7 @@
             document.getElementById('multiplierDisplay').innerText = "CRASHED (" + currentMultiplier.toFixed(2) + "x)";
             document.getElementById('statusDisplay').innerText = "Round ended. Restarting...";
 
-            drawJetScene(1, true);
+            drawScene(1, true);
 
             let b1 = document.getElementById('btnBet1');
             let b2 = document.getElementById('btnBet2');
@@ -415,7 +440,6 @@
             if (bet1State === 'PLACED') { bet1State = 'NONE'; b1.innerText = "Lost"; }
             if (bet2State === 'PLACED') { bet2State = 'NONE'; b2.innerText = "Lost"; }
 
-            // Add to history bar
             let historyBar = document.getElementById('historyBar');
             let chip = document.createElement('div');
             chip.className = currentMultiplier >= 10 ? 'history-chip high' : 'history-chip';
