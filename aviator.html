@@ -5,59 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Aviator - Yolo 247 P9</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #0b0f19; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; overscroll-behavior-y: contain; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; -webkit-user-select: none; }
+        html, body { background-color: #0b0f19; color: #ffffff; width: 100%; height: 100%; overflow: hidden; position: fixed; touch-action: none; overscroll-behavior: none; }
         
         /* Top Header */
-        header { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background-color: #121826; border-bottom: 1px solid #1e293b; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; background-color: #121826; border-bottom: 1px solid #1e293b; height: 48px; }
         .logo-area { font-size: 18px; font-weight: bold; color: #ef4444; font-style: italic; cursor: pointer; }
         .header-right { display: flex; align-items: center; gap: 8px; }
         .user-badge { background: #1e293b; border: 1px solid #334155; padding: 4px 10px; border-radius: 16px; font-size: 12px; color: #38bdf8; font-weight: bold; }
         .btn-portal { background: #334155; color: white; border: none; padding: 5px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; }
 
         /* History Bar */
-        .history-bar { display: flex; gap: 6px; padding: 8px 12px; background: #0b0f19; overflow-x: auto; white-space: nowrap; border-bottom: 1px solid #1e293b; }
-        .history-chip { background: #121826; padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; color: #22c55e; border: 1px solid #1e293b; }
+        .history-bar { display: flex; gap: 6px; padding: 6px 12px; background: #0b0f19; overflow-x: auto; white-space: nowrap; border-bottom: 1px solid #1e293b; height: 35px; align-items: center; }
+        .history-chip { background: #121826; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; color: #22c55e; border: 1px solid #1e293b; flex-shrink: 0; }
         .history-chip.high { color: #f59e0b; }
 
         /* Main Container */
-        .main-container { flex: 1; display: flex; flex-direction: column; padding: 10px; max-width: 500px; margin: 0 auto; width: 100%; gap: 10px; padding-bottom: 60px; }
+        .main-container { display: flex; flex-direction: column; padding: 8px 10px; max-width: 500px; margin: 0 auto; width: 100%; gap: 8px; height: calc(100% - 83px); overflow: hidden; }
         
-        /* Game Screen (Black background with red sunburst rays) */
-        .game-screen { position: relative; width: 100%; height: 230px; background-color: #050505; border: 2px solid #1e293b; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.8); display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        /* Game Screen */
+        .game-screen { position: relative; width: 100%; height: 210px; background-color: #050505; border: 2px solid #1e293b; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.8); display: flex; flex-direction: column; justify-content: center; align-items: center; flex-shrink: 0; touch-action: none; }
         canvas { display: block; width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
         
-        .multiplier-display { position: relative; z-index: 2; font-size: 46px; font-weight: bold; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.9); }
-        .status-display { position: relative; z-index: 2; font-size: 13px; color: #94a3b8; margin-top: 4px; }
+        .multiplier-display { position: relative; z-index: 2; font-size: 42px; font-weight: bold; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.9); }
+        .status-display { position: relative; z-index: 2; font-size: 12px; color: #94a3b8; margin-top: 2px; }
 
         /* Betting Section */
-        .bets-section { display: flex; flex-direction: column; gap: 10px; }
-        .bet-card { background-color: #121826; border: 1px solid #1e293b; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .bets-section { display: flex; flex-direction: column; gap: 8px; }
+        .bet-card { background-color: #121826; border: 1px solid #1e293b; border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 6px; }
         
-        .bet-tabs { display: flex; background: #0b0f19; border-radius: 8px; padding: 2px; margin-bottom: 4px; width: fit-content; }
-        .tab-btn { background: transparent; border: none; color: #94a3b8; padding: 4px 14px; font-size: 12px; font-weight: bold; border-radius: 6px; cursor: pointer; }
+        .bet-tabs { display: flex; background: #0b0f19; border-radius: 6px; padding: 2px; margin-bottom: 2px; width: fit-content; }
+        .tab-btn { background: transparent; border: none; color: #94a3b8; padding: 3px 12px; font-size: 11px; font-weight: bold; border-radius: 4px; cursor: pointer; }
         .tab-btn.active { background: #1e293b; color: #ffffff; }
 
         .bet-main-row { display: flex; gap: 8px; align-items: center; }
         .input-box-group { display: flex; align-items: center; background: #0b0f19; border: 1px solid #334155; border-radius: 8px; overflow: hidden; width: 45%; }
-        .btn-pm { background: #1e293b; color: white; border: none; padding: 10px 10px; font-size: 15px; font-weight: bold; cursor: pointer; }
+        .btn-pm { background: #1e293b; color: white; border: none; padding: 8px 10px; font-size: 14px; font-weight: bold; cursor: pointer; }
         .btn-pm:active { background: #334155; }
-        .input-box-group input { width: 100%; padding: 8px 2px; background: transparent; border: none; color: white; font-size: 14px; text-align: center; font-weight: bold; outline: none; }
+        .input-box-group input { width: 100%; padding: 6px 2px; background: transparent; border: none; color: white; font-size: 14px; text-align: center; font-weight: bold; outline: none; }
 
-        .btn-place-bet { background-color: #22c55e; color: #ffffff; border: none; padding: 10px 12px; font-size: 15px; font-weight: bold; border-radius: 8px; cursor: pointer; flex: 1; transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); }
+        .btn-place-bet { background-color: #22c55e; color: #ffffff; border: none; padding: 8px 12px; font-size: 14px; font-weight: bold; border-radius: 8px; cursor: pointer; flex: 1; transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); }
         .btn-place-bet.cashout { background-color: #ef4444; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); }
         .btn-place-bet:disabled { background-color: #334155; color: #94a3b8; cursor: not-allowed; box-shadow: none; }
 
-        /* Quick Amount Shortcuts (100, 200, 500, 1000) */
+        /* Quick Amount Shortcuts */
         .shortcuts-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-        .shortcut-btn { background: #1e293b; border: 1px solid #334155; color: #cbd5e1; font-size: 11px; padding: 5px 0; border-radius: 6px; cursor: pointer; text-align: center; font-weight: bold; }
+        .shortcut-btn { background: #1e293b; border: 1px solid #334155; color: #cbd5e1; font-size: 11px; padding: 4px 0; border-radius: 6px; cursor: pointer; text-align: center; font-weight: bold; }
         .shortcut-btn:active { background: #334155; }
 
         /* Bottom Nav Bar */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #121826; border-top: 1px solid #1e293b; display: flex; justify-content: space-around; padding: 8px 0; z-index: 1000; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: #121826; border-top: 1px solid #1e293b; display: flex; justify-content: space-around; padding: 6px 0; z-index: 1000; height: 50px; }
         .nav-item { display: flex; flex-direction: column; align-items: center; color: #94a3b8; font-size: 10px; cursor: pointer; gap: 2px; text-decoration: none; }
         .nav-item.active { color: #f59e0b; }
-        .nav-icon { font-size: 16px; }
+        .nav-icon { font-size: 15px; }
 
         /* Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); justify-content: center; align-items: center; z-index: 2000; }
@@ -91,8 +91,8 @@
 
     <div class="main-container">
         
-        <!-- Game Screen with Red Plane & Sunburst BG -->
-        <div class="game-screen">
+        <!-- Game Screen -->
+        <div class="game-screen" id="gameScreen">
             <div class="multiplier-display" id="multiplierDisplay">1.00x</div>
             <div class="status-display" id="statusDisplay">Next round starting in 15s...</div>
             <canvas id="gameCanvas"></canvas>
@@ -170,6 +170,15 @@
     </div>
 
     <script>
+        // Completely lock touch pull-to-refresh gestures across the entire document
+        document.addEventListener('touchstart', function(e) {
+            // Allow inputs and buttons to work normally
+        }, { passive: true });
+
+        document.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+
         let audioCtx = null;
         function playSound(type) {
             try {
@@ -250,13 +259,13 @@
             return num === 1 ? bet1State : bet2State;
         }
 
-        // Canvas Red Aviator Airplane Animation
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
         function resizeCanvas() {
-            canvas.width = canvas.parentElement.clientWidth;
-            canvas.height = canvas.parentElement.clientHeight;
+            let screenBox = document.getElementById('gameScreen');
+            canvas.width = screenBox.clientWidth;
+            canvas.height = screenBox.clientHeight;
         }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
@@ -277,8 +286,7 @@
             ctx.translate(x, y);
             ctx.rotate(angle);
 
-            // Red Propeller Airplane Shape (Jaise screenshot mein hai)
-            ctx.fillStyle = '#ef4444'; // Red body
+            ctx.fillStyle = '#ef4444';
             ctx.beginPath();
             ctx.moveTo(24, 0);
             ctx.lineTo(-14, -9);
@@ -293,7 +301,6 @@
             ctx.closePath();
             ctx.fill();
 
-            // Wing Mark / Accent ('X' style logo on wing)
             ctx.fillStyle = '#ffffff';
             ctx.font = "bold 10px sans-serif";
             ctx.fillText("X", -6, 3);
@@ -304,7 +311,6 @@
         function drawScene(progressRatio, isCrashed = false) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Sunburst background lines from bottom-left corner
             ctx.strokeStyle = 'rgba(239, 68, 68, 0.08)';
             ctx.lineWidth = 1.5;
             for (let a = 0; a < Math.PI / 2; a += 0.15) {
@@ -322,7 +328,6 @@
             let currentY = startY - (startY - endY) * progressRatio;
 
             if (gameState === 'FLYING' || isCrashed) {
-                // Red diagonal flight path curve
                 ctx.beginPath();
                 ctx.moveTo(startX, startY);
                 ctx.quadraticCurveTo(canvas.width * 0.4, canvas.height - 20, currentX, currentY);
@@ -337,8 +342,7 @@
 
                 drawRedAviatorPlane(currentX, currentY, isCrashed ? 0.75 : -0.3, isCrashed);
             } else {
-                // Waiting state: Red plane resting on ramp at bottom-left corner
-                ctx.fillStyle = '#991b1b'; // Ramp base
+                ctx.fillStyle = '#991b1b';
                 ctx.fillRect(10, canvas.height - 30, 45, 8);
                 drawRedAviatorPlane(35, canvas.height - 36, 0, false);
             }
@@ -432,7 +436,6 @@
 
                 drawScene(ratio);
 
-                // Live Win Amount Update on Button
                 if (bet1State === 'PLACED') {
                     let liveWin1 = Math.floor(bet1Amount * currentMultiplier);
                     b1.innerHTML = `CASH OUT<br><span style="font-size:13px; font-weight:bold;">₹ ${liveWin1}</span>`;
