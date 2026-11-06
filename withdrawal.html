@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Withdrawal - Gaming Portal</title>
+    <title>Bank Withdrawal - Gaming Portal</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #0f172a; color: #ffffff; padding: 16px; min-height: 100vh; }
@@ -12,11 +12,11 @@
         
         .wallet-box { background: #0f172a; padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 16px; border: 1px solid #475569; }
         .wallet-box p { font-size: 12px; color: #94a3b8; }
-        .wallet-box h3 { font-size: 20px; color: #0ecb81; margin-top: 4px; }
+        .wallet-box h3 { font-size: 20px; color: #22c55e; margin-top: 4px; }
 
         .form-group { margin-bottom: 12px; }
         label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 4px; font-weight: bold; }
-        input { width: 100%; padding: 10px; background-color: #0f172a; border: 1px solid #334155; border-radius: 6px; color: white; font-size: 14px; outline: none; }
+        select, input { width: 100%; padding: 10px; background-color: #0f172a; border: 1px solid #334155; border-radius: 6px; color: white; font-size: 14px; outline: none; }
         
         .btn-submit { width: 100%; background: linear-gradient(135deg, #f59e0b, #d97706); color: #121622; border: none; padding: 11px; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 8px; }
         .btn-back { width: 100%; background-color: #475569; color: white; border: none; padding: 9px; border-radius: 6px; font-weight: bold; font-size: 13px; cursor: pointer; margin-top: 8px; }
@@ -25,12 +25,29 @@
 </head>
 <body>
     <div class="container">
-        <h2>📤 Bank Withdrawal (Paisa Nikalein)</h2>
+        <h2>Bank Withdrawal</h2>
 
         <!-- Available Balance Box -->
         <div class="wallet-box">
             <p>Available Balance</p>
             <h3>₹ <span id="withdrawBalance">0.00</span></h3>
+        </div>
+
+        <!-- Bank Selection Dropdown for Customer Withdrawal -->
+        <div class="form-group">
+            <label>Apni Bank Chunein (Select Bank)</label>
+            <select id="withdrawBankSelect">
+                <option value="SBI">State Bank of India (SBI)</option>
+                <option value="PNB">Punjab National Bank (PNB)</option>
+                <option value="BOB">Bank of Baroda (BOB)</option>
+                <option value="Central Bank">Central Bank of India</option>
+                <option value="HDFC">HDFC Bank</option>
+                <option value="ICICI">ICICI Bank</option>
+                <option value="Axis">Axis Bank</option>
+                <option value="Kotak">Kotak Mahindra Bank</option>
+                <option value="Union Bank">Union Bank of India</option>
+                <option value="Airtel Payments Bank">Airtel Payments Bank</option>
+            </select>
         </div>
 
         <div class="form-group">
@@ -40,7 +57,7 @@
 
         <div class="form-group">
             <label>Bank Account Number</label>
-            <input type="text" id="withdrawAccNo" placeholder="Apna bank account number daalein">
+            <input type="text" id="withdrawAccNo" placeholder="Apna account number daalein">
         </div>
 
         <div class="form-group">
@@ -50,7 +67,7 @@
 
         <div class="form-group">
             <label>Kitna Amount Nikalna Hai? (₹)</label>
-            <input type="number" id="withdrawAmount" placeholder="Amount daalein (Jaise: 500)">
+            <input type="number" id="withdrawAmount" placeholder="Amount daalein">
         </div>
 
         <button class="btn-submit" onclick="submitWithdrawal()">Withdrawal Request Bhejein</button>
@@ -59,18 +76,18 @@
     </div>
 
     <script>
-        // Local storage se current balance dikhana
         let balance = parseFloat(localStorage.getItem('user_wallet_balance')) || 0.00;
         document.getElementById('withdrawBalance').innerText = balance.toFixed(2);
 
         function submitWithdrawal() {
+            let bank = document.getElementById('withdrawBankSelect').value;
             let name = document.getElementById('accHolderName').value;
             let accNo = document.getElementById('withdrawAccNo').value;
             let ifsc = document.getElementById('withdrawIfsc').value;
             let amount = parseFloat(document.getElementById('withdrawAmount').value);
 
             if(!name || !accNo || !ifsc || !amount) {
-                alert('Kripya sabhi bank details aur amount bharein!');
+                alert('Kripya sabhi details aur amount bharein!');
                 return;
             }
 
@@ -79,7 +96,6 @@
                 return;
             }
 
-            // Balance turant kaat lena ya admin approval ke liye bhejna
             balance -= amount;
             localStorage.setItem('user_wallet_balance', balance);
 
@@ -88,6 +104,7 @@
             
             requests.push({
                 phone: currentUser,
+                bank: bank,
                 name: name,
                 acc: accNo,
                 ifsc: ifsc,
