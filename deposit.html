@@ -11,6 +11,23 @@
         h2 { font-size: 18px; color: #f59e0b; text-align: center; margin-bottom: 16px; }
         .qr-box { text-align: center; background: #fff; padding: 12px; border-radius: 10px; margin-bottom: 14px; }
         .qr-box img { width: 160px; height: 160px; object-fit: contain; }
+        
+        /* Direct Payment App Button */
+        .btn-upi-app {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            text-decoration: none;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+        }
+
         .form-group { margin-bottom: 12px; }
         label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 4px; }
         input { width: 100%; padding: 10px; background-color: #0f172a; border: 1px solid #334155; border-radius: 6px; color: white; font-size: 14px; }
@@ -24,10 +41,14 @@
         <h2>QR Code Deposit System</h2>
         
         <div class="qr-box">
-            <!-- Yahan aapka asli uploaded QR code dikhega -->
-            <img src="qrcode.jpg" alt="Asli QR Code[span_1](start_span)"[span_1](end_span)>
+            <img src="qrcode.jpg" alt="Asli QR Code[span_0](start_span)"[span_0](end_span)>
             <p style="color: #000; font-size: 11px; margin-top: 6px; font-weight: bold;">Google Pay / PhonePe / Paytm Scanner</p>
         </div>
+
+        <!-- Yahan direct UPI payment app kholne ka button jod diya hai -->
+        <a href="upi://pay?pa=yoursupi@paytm&pn=GamingPortal&am=100" class="btn-upi-app">
+            ⚡ Click Here to Pay via GPay / PhonePe / Paytm
+        </a>
 
         <div class="form-group">
             <label>Kitna Amount Dala Hai? (₹)</label>
