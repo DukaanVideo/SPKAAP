@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gaming Portal</title>
+    <title>Gaming Portal - Yolo 247</title>
     <style>
         * {
             margin: 0;
@@ -70,7 +70,7 @@
         }
         .container {
             padding: 16px;
-            max-width: 600px;
+            max-width: 500px;
             margin: 0 auto;
         }
         .banner {
@@ -90,8 +90,60 @@
             font-size: 13px;
             color: #94a3b8;
         }
+        /* Wallet Card */
+        .wallet-card {
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+        }
+        .wallet-card h4 {
+            font-size: 13px;
+            color: #e0f2fe;
+            margin-bottom: 4px;
+        }
+        .wallet-card .balance {
+            font-size: 26px;
+            font-weight: bold;
+            color: #fff;
+        }
+        /* Dashboard Tabs */
+        .dash-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+        .dash-tab-btn {
+            flex: 1;
+            padding: 10px;
+            background: #1e293b;
+            border: 1px solid #475569;
+            color: #cbd5e1;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .dash-tab-btn.active {
+            background: #0284c7;
+            color: #fff;
+            border-color: #0284c7;
+        }
+        .tab-content {
+            display: none;
+            background: #1e293b;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            margin-bottom: 20px;
+        }
+        .tab-content.active {
+            display: block;
+        }
         .section-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             margin-bottom: 12px;
             color: #e2e8f0;
@@ -125,6 +177,56 @@
             font-weight: bold;
             color: #ffffff;
         }
+        /* QR & Form Styles */
+        .qr-box {
+            text-align: center;
+            background: #fff;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 14px;
+        }
+        .qr-box img {
+            width: 140px;
+            height: 140px;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 4px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            color: white;
+            font-size: 14px;
+        }
+        .btn-submit {
+            width: 100%;
+            background-color: #22c55e;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 6px;
+        }
+        .note {
+            font-size: 11px;
+            color: #64748b;
+            text-align: center;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -159,36 +261,6 @@
             font-size: 18px;
             color: #f59e0b;
         }
-        .form-group {
-            margin-bottom: 12px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 12px;
-            color: #94a3b8;
-            margin-bottom: 4px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            background-color: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 6px;
-            color: white;
-            font-size: 14px;
-        }
-        .btn-submit {
-            width: 100%;
-            background-color: #f59e0b;
-            color: #0f172a;
-            border: none;
-            padding: 10px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            margin-top: 8px;
-        }
         .switch-text {
             text-align: center;
             font-size: 12px;
@@ -219,6 +291,7 @@
     </header>
 
     <div class="container">
+        <!-- Guest View -->
         <div id="guest-view">
             <div class="banner">
                 <h2>Welcome to Gaming Portal</h2>
@@ -227,25 +300,90 @@
 
             <div class="section-title">Available Games</div>
             <div class="games-grid">
-                <div class="game-card" onclick="checkAuthAndPlay('Aviator')">
+                <div class="game-card" onclick="checkAuthAndPlay()">
                     <div class="game-icon">✈️</div>
                     <div class="game-name">Aviator</div>
                 </div>
-                <div class="game-card" onclick="checkAuthAndPlay('Coming Soon Game')">
+                <div class="game-card" onclick="alert('Jald hi aayega!')">
                     <div class="game-icon">🎮</div>
                     <div class="game-name">Coming Soon</div>
                 </div>
             </div>
         </div>
 
+        <!-- Dashboard View (After Login) -->
         <div id="dashboard-view">
             <div class="banner">
                 <h2 id="welcomeUserMsg">Swagat hai, User!</h2>
                 <p>Aapka account active hai.</p>
-                <button onclick="logoutUser()" style="margin-top: 10px; background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Logout</button>
+                <button onclick="logoutUser()" style="margin-top: 8px; background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;">Logout</button>
             </div>
 
-            <div class="section-title">Aapke Games</div>
+            <!-- Wallet Balance Card -->
+            <div class="wallet-card">
+                <h4>Wallet Balance</h4>
+                <div class="balance">₹ <span id="wallet-balance">0.00</span></div>
+            </div>
+
+            <!-- Inner Tabs for Deposit / Withdraw / Support -->
+            <div class="dash-tabs">
+                <button class="dash-tab-btn active" onclick="switchDashTab('depositTab')">Deposit</button>
+                <button class="dash-tab-btn" onclick="switchDashTab('withdrawTab')">Withdraw</button>
+                <button class="dash-tab-btn" onclick="switchDashTab('supportTab')">Support</button>
+            </div>
+
+            <!-- 1. Deposit Tab Content -->
+            <div id="depositTab" class="tab-content active">
+                <div class="qr-box">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=upi://pay?pa=punjab.upi@ybl&pn=YoloPay" alt="QR Code">
+                    <p style="color: #000; font-size: 11px; margin-top: 4px; font-weight: bold;">GPay / PhonePe / Paytm Scanner</p>
+                </div>
+                <div class="form-group">
+                    <label>Kitna Amount Dala Hai? (₹)</label>
+                    <input type="number" id="dep-amount" placeholder="Amount daalein">
+                </div>
+                <div class="form-group">
+                    <label>UPI Transaction / UTR Number (12 Digits)</label>
+                    <input type="text" id="dep-utr" placeholder="12 digit UTR number">
+                </div>
+                <div class="form-group">
+                    <label>Payment Screenshot Upload Karein</label>
+                    <input type="file" id="dep-screenshot" accept="image/*" style="font-size: 12px;">
+                </div>
+                <button class="btn-submit" onclick="submitDeposit()">Deposit Request Bhejein</button>
+                <div class="note">Admin real payment check karke balance wallet mein jodege. Fake UTR na dalein.</div>
+            </div>
+
+            <!-- 2. Withdrawal Tab Content -->
+            <div id="withdrawTab" class="tab-content">
+                <h3 style="font-size: 14px; color: #f59e0b; margin-bottom: 10px;">Bank Transfer Withdrawal</h3>
+                <div class="form-group">
+                    <label>Withdrawal Amount (₹)</label>
+                    <input type="number" id="wd-amount" placeholder="Amount daalein">
+                </div>
+                <div class="form-group">
+                    <label>Bank Account Number</label>
+                    <input type="text" id="wd-account" placeholder="Account number">
+                </div>
+                <div class="form-group">
+                    <label>IFSC Code</label>
+                    <input type="text" id="wd-ifsc" placeholder="IFSC code">
+                </div>
+                <div class="note" style="color: #f59e0b; margin-bottom: 10px;">
+                    * 2% service charge cut hone ke baad bacha hua amount 20 minute ke andar account mein bhej diya jayega.
+                </div>
+                <button class="btn-submit" onclick="submitWithdrawal()" style="background: #3b82f6;">Bank Me Transfer Karein</button>
+            </div>
+
+            <!-- 3. Support Tab Content -->
+            <div id="supportTab" class="tab-content" style="text-align: center;">
+                <h3 style="font-size: 14px; color: #f59e0b; margin-bottom: 10px;">Customer Help Support</h3>
+                <p style="font-size: 13px; color: #cbd5e1; margin-bottom: 10px;">Koi bhi payment ya game ki samasya ke liye sampark karein:</p>
+                <p><a href="https://wa.me/910000000000" target="_blank" style="color: #38bdf8; font-weight: bold; text-decoration: none;">💬 WhatsApp Support Help</a></p>
+            </div>
+
+            <!-- Games Section inside Dashboard -->
+            <div class="section-title" style="margin-top: 20px;">Aapke Games</div>
             <div class="games-grid">
                 <div class="game-card" onclick="window.location.href='aviator.html'">
                     <div class="game-icon">✈️</div>
@@ -259,6 +397,7 @@
         </div>
     </div>
 
+    <!-- Login Modal -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal('loginModal')">&times;</span>
@@ -276,6 +415,7 @@
         </div>
     </div>
 
+    <!-- Signup Modal -->
     <div class="modal" id="signupModal">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal('signupModal')">&times;</span>
@@ -284,7 +424,7 @@
                 <label>Mobile Number</label>
                 <input type="tel" id="signupPhone" placeholder="Mobile number daalein">
             </div>
-            <button class="btn-submit" onclick="sendOTP()">OTP Bhejein</button>
+            <button class="btn-submit" onclick="sendOTP()" style="background: #3b82f6; color: white;">OTP Bhejein</button>
             
             <div id="otpSection" style="display: none; margin-top: 12px;">
                 <div class="form-group">
@@ -303,6 +443,9 @@
     </div>
 
     <script>
+        // Load Wallet Balance from localStorage
+        let currentBalance = parseFloat(localStorage.getItem('user_wallet_balance')) || 0.00;
+
         window.onload = function() {
             const savedUser = localStorage.getItem('portal_user');
             if (savedUser) {
@@ -372,6 +515,7 @@
             document.getElementById('dashboard-view').style.display = 'block';
             document.getElementById('auth-buttons-container').style.display = 'none';
             document.getElementById('welcomeUserMsg').innerText = 'Swagat hai, ' + phone + '!';
+            document.getElementById('wallet-balance').innerText = currentBalance.toFixed(2);
         }
 
         function logoutUser() {
@@ -381,13 +525,77 @@
             document.getElementById('auth-buttons-container').style.display = 'flex';
         }
 
-        function checkAuthAndPlay(gameName) {
+        function checkAuthAndPlay() {
             const savedUser = localStorage.getItem('portal_user');
             if (!savedUser) {
                 alert('Kripya pehle Login ya Sign Up karein!');
                 openModal('loginModal');
             } else {
                 window.location.href = 'aviator.html';
+            }
+        }
+
+        // Inner Dashboard Tabs Switcher (Deposit / Withdraw / Support)
+        function switchDashTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.dash-tab-btn').forEach(el => el.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Deposit Submit Function
+        function submitDeposit() {
+            let amount = document.getElementById('dep-amount').value;
+            let utr = document.getElementById('dep-utr').value;
+            let file = document.getElementById('dep-screenshot').files[0];
+
+            if(!amount || !utr || !file) {
+                alert('Kripya Amount, UTR Number aur Screenshot teeno cheezein bharein!');
+                return;
+            }
+
+            if(utr.length < 10) {
+                alert('Kripya sahi 12 digit ka UTR number daalein!');
+                return;
+            }
+
+            alert(`Aapki ₹${amount} ki deposit request (UTR: ${utr}) bhej di gayi hai! Admin verification ke baad balance update hoga.`);
+            
+            document.getElementById('dep-amount').value = '';
+            document.getElementById('dep-utr').value = '';
+            document.getElementById('dep-screenshot').value = '';
+        }
+
+        // Withdrawal Submit Function (With 2% deduction)
+        function submitWithdrawal() {
+            let amount = parseFloat(document.getElementById('wd-amount').value);
+            let account = document.getElementById('wd-account').value;
+            let ifsc = document.getElementById('wd-ifsc').value;
+
+            if(!amount || !account || !ifsc) {
+                alert('Kripya sabhi Bank details aur Amount bharein!');
+                return;
+            }
+
+            if(amount > currentBalance) {
+                alert('Aapke wallet mein itna balance nahi hai!');
+                return;
+            }
+
+            let deduction = amount * 0.02;
+            let finalAmount = amount - deduction;
+
+            if(confirm(`Aap ₹${amount} nikal rahe hain. 2% charge (₹${deduction.toFixed(2)}) katne ke baad, ₹${finalAmount.toFixed(2)} aapke account mein 20 minute ke andar bhej diye jayenge. Kya aap confirm karte hain?`)) {
+                currentBalance -= amount;
+                localStorage.setItem('user_wallet_balance', currentBalance);
+                document.getElementById('wallet-balance').innerText = currentBalance.toFixed(2);
+
+                alert(`Withdrawal Request Accept Ho Gayi Hai! ₹${finalAmount.toFixed(2)} 20 minute mein account (${account}) mein transfer ho jayenge.`);
+                
+                document.getElementById('wd-amount').value = '';
+                document.getElementById('wd-account').value = '';
+                document.getElementById('wd-ifsc').value = '';
             }
         }
     </script>
