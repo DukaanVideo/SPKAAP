@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mahakal Puzzle Battle - Gaming Portal</title>
+    <title>Gaming Portal</title>
     <style>
         * {
             margin: 0;
@@ -16,7 +16,6 @@
             color: #ffffff;
             min-height: 100vh;
         }
-        /* Top Navigation Bar */
         header {
             display: flex;
             justify-content: space-between;
@@ -69,15 +68,11 @@
             border: none;
             color: white;
         }
-
-        /* Main Container */
         .container {
             padding: 16px;
             max-width: 600px;
             margin: 0 auto;
         }
-
-        /* Banner Section */
         .banner {
             background: linear-gradient(135deg, #1e293b, #334155);
             border-radius: 12px;
@@ -95,8 +90,6 @@
             font-size: 13px;
             color: #94a3b8;
         }
-
-        /* Games Grid Section (Future proof layout) */
         .section-title {
             font-size: 16px;
             font-weight: bold;
@@ -132,8 +125,6 @@
             font-weight: bold;
             color: #ffffff;
         }
-
-        /* Modals (Login / Signup / OTP) */
         .modal {
             display: none;
             position: fixed;
@@ -209,8 +200,6 @@
             color: #3b82f6;
             font-weight: bold;
         }
-
-        /* User Profile Dashboard View (Hidden by default unless logged in) */
         #dashboard-view {
             display: none;
         }
@@ -218,9 +207,8 @@
 </head>
 <body>
 
-    <!-- Header Section -->
     <header>
-        <div class="logo">Mahakal Gaming</div>
+        <div class="logo">Gaming Portal</div>
         <div class="nav-right">
             <button class="btn-download" onclick="alert('App download shuru ho rahi hai!')">Download App</button>
             <div class="auth-buttons" id="auth-buttons-container">
@@ -230,73 +218,64 @@
         </div>
     </header>
 
-    <!-- Main App Content -->
     <div class="container">
-        
-        <!-- Guest / Public View -->
         <div id="guest-view">
             <div class="banner">
-                <h2>Mahakal Puzzle Battle</h2>
-                <p>Khele naye puzzles aur jeetein exciting rewards! Naye games jaldi judne wale hain.</p>
+                <h2>Welcome to Gaming Portal</h2>
+                <p>Khele naye games aur jeetein exciting rewards!</p>
             </div>
 
             <div class="section-title">Available Games</div>
             <div class="games-grid">
-                <div class="game-card" onclick="checkAuthAndPlay('Mahakal Puzzle')">
-                    <div class="game-icon">🔱</div>
-                    <div class="game-name">Mahakal Puzzle</div>
+                <div class="game-card" onclick="checkAuthAndPlay('Puzzle Game')">
+                    <div class="game-icon">🧩</div>
+                    <div class="game-name">Puzzle Game</div>
                 </div>
-                <!-- Future games can be added easily right here line by line -->
-                <div class="game-card" onclick="checkAuthAndPlay('Coming Soon Game 2')">
+                <div class="game-card" onclick="checkAuthAndPlay('Coming Soon Game')">
                     <div class="game-icon">🎮</div>
                     <div class="game-name">Coming Soon</div>
                 </div>
             </div>
         </div>
 
-        <!-- Logged In Dashboard View -->
         <div id="dashboard-view">
             <div class="banner">
                 <h2 id="welcomeUserMsg">Swagat hai, User!</h2>
-                <p>Aapka account active hai. Niche diye gaye games mein se koi bhi khelein.</p>
+                <p>Aapka account active hai.</p>
                 <button onclick="logoutUser()" style="margin-top: 10px; background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer;">Logout</button>
             </div>
 
             <div class="section-title">Aapke Games</div>
             <div class="games-grid">
                 <div class="game-card" onclick="alert('Game start ho raha hai!')">
-                    <div class="game-icon">🔱</div>
-                    <div class="game-name">Mahakal Puzzle</div>
+                    <div class="game-icon">🧩</div>
+                    <div class="game-name">Puzzle Game</div>
                 </div>
-                <!-- Future games addition slot -->
                 <div class="game-card" onclick="alert('Naya game jald aayega!')">
                     <div class="game-icon">🚀</div>
-                    <div class="game-name">Future Game Slot</div>
+                    <div class="game-name">Future Game</div>
                 </div>
             </div>
         </div>
-
     </div>
 
-    <!-- Login Modal -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal('loginModal')">&times;</span>
             <h3>Login Karein</h3>
             <div class="form-group">
                 <label>Mobile Number</label>
-                <input type="tel5" id="loginPhone" placeholder=" Apna mobile number daalein">
+                <input type="tel" id="loginPhone" placeholder="Apna mobile number daalein">
             </div>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" id="loginPassword" placeholder=" Apna password daalein">
+                <input type="password" id="loginPassword" placeholder="Apna password daalein">
             </div>
             <button class="btn-submit" onclick="handleLogin()">Login Karein</button>
             <div class="switch-text" onclick="switchToSignup()">Naya account nahi hai? <span>Sign Up karein</span></div>
         </div>
     </div>
 
-    <!-- Signup Modal (Step 1: Mobile & OTP) -->
     <div class="modal" id="signupModal">
         <div class="modal-content">
             <span class="modal-close" onclick="closeModal('signupModal')">&times;</span>
@@ -323,11 +302,9 @@
         </div>
     </div>
 
-    <!-- JavaScript Logic for Session & Auth -->
     <script>
-        // Check if user is already logged in (Auto Login Session)
         window.onload = function() {
-            const savedUser = localStorage.getItem('mahakal_user');
+            const savedUser = localStorage.getItem('portal_user');
             if (savedUser) {
                 showDashboard(savedUser);
             }
@@ -351,7 +328,6 @@
             openModal('loginModal');
         }
 
-        // Signup OTP simulation
         function sendOTP() {
             const phone = document.getElementById('signupPhone').value;
             if(phone.length < 10) {
@@ -368,7 +344,7 @@
             const password = document.getElementById('signupPassword').value;
 
             if(otp === '1234' && password.length > 0) {
-                localStorage.setItem('mahakal_user', phone);
+                localStorage.setItem('portal_user', phone);
                 alert('Account safalpurvak ban gaya!');
                 closeModal('signupModal');
                 showDashboard(phone);
@@ -377,13 +353,12 @@
             }
         }
 
-        // Login handling
         function handleLogin() {
             const phone = document.getElementById('loginPhone').value;
             const password = document.getElementById('loginPassword').value;
 
             if(phone.length >= 10 && password.length > 0) {
-                localStorage.setItem('mahakal_user', phone);
+                localStorage.setItem('portal_user', phone);
                 alert('Login safal raha!');
                 closeModal('loginModal');
                 showDashboard(phone);
@@ -400,14 +375,14 @@
         }
 
         function logoutUser() {
-            localStorage.removeItem('mahakal_user');
+            localStorage.removeItem('portal_user');
             document.getElementById('guest-view').style.display = 'block';
             document.getElementById('dashboard-view').style.display = 'none';
             document.getElementById('auth-buttons-container').style.display = 'flex';
         }
 
         function checkAuthAndPlay(gameName) {
-            const savedUser = localStorage.getItem('mahakal_user');
+            const savedUser = localStorage.getItem('portal_user');
             if (!savedUser) {
                 alert('Kripya pehle Login ya Sign Up karein!');
                 openModal('loginModal');
