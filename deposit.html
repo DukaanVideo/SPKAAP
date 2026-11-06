@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposit Money - Gaming Portal</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0f172a; color: #ffffff; padding: 16px; min-height: 100vh; }
+        .container { max-width: 450px; margin: 0 auto; background: #1e293b; padding: 20px; border-radius: 12px; border: 1px solid #334155; }
+        h2 { font-size: 18px; color: #f59e0b; text-align: center; margin-bottom: 16px; }
+        .qr-box { text-align: center; background: #fff; padding: 12px; border-radius: 10px; margin-bottom: 14px; }
+        .qr-box img { width: 150px; height: 150px; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 4px; }
+        input { width: 100%; padding: 10px; background-color: #0f172a; border: 1px solid #334155; border-radius: 6px; color: white; font-size: 14px; }
+        .btn-submit { width: 100%; background-color: #22c55e; color: white; border: none; padding: 11px; border-radius: 6px; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 8px; }
+        .btn-back { width: 100%; background-color: #475569; color: white; border: none; padding: 9px; border-radius: 6px; font-weight: bold; font-size: 13px; cursor: pointer; margin-top: 8px; }
+        .note { font-size: 11px; color: #64748b; text-align: center; margin-top: 10px; line-height: 1.4; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>QR Code Deposit System</h2>
+        
+        <div class="qr-box">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=punjab.upi@ybl&pn=YoloPay" alt="QR Code">
+            <p style="color: #000; font-size: 11px; margin-top: 4px; font-weight: bold;">Google Pay / PhonePe / Paytm Scanner</p>
+        </div>
+
+        <div class="form-group">
+            <label>Kitna Amount Dala Hai? (₹)</label>
+            <input type="number" id="dep-amount" placeholder="Amount daalein">
+        </div>
+
+        <div class="form-group">
+            <label>UPI Transaction / UTR Number (12 Digits)</label>
+            <input type="text" id="dep-utr" placeholder="12 digit UTR number">
+        </div>
+
+        <div class="form-group">
+            <label>Payment Screenshot Upload Karein</label>
+            <input type="file" id="dep-screenshot" accept="image/*" style="font-size: 12px; color: #cbd5e1;">
+        </div>
+
+        <button class="btn-submit" onclick="submitDeposit()">Deposit Request Bhejein</button>
+        <button class="btn-back" onclick="window.location.href='index.html'">Wapas Home Par Jayein</button>
+        <div class="note">Admin real payment check karke balance wallet mein jodege.</div>
+    </div>
+
+    <script>
+        function submitDeposit() {
+            let amount = document.getElementById('dep-amount').value;
+            let utr = document.getElementById('dep-utr').value;
+            let file = document.getElementById('dep-screenshot').files[0];
+
+            if(!amount || !utr || !file) {
+                alert('Kripya Amount, UTR Number aur Screenshot teeno cheezein bharein!');
+                return;
+            }
+
+            if(utr.length < 10) {
+                alert('Kripya sahi 12 digit ka UTR number daalein!');
+                return;
+            }
+
+            alert(`Aapki ₹${amount} ki deposit request (UTR: ${utr}) bhej di gayi hai!`);
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
