@@ -24,6 +24,7 @@
             border-radius: 16px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
             border: 1px solid #ffcc00;
+            box-sizing: border-box;
         }
         h1 {
             color: #ffcc00;
@@ -82,8 +83,29 @@
             cursor: pointer;
             margin-top: 20px;
         }
+        .btn-share {
+            background: linear-gradient(135deg, #00ffcc, #00b386);
+            color: #0b0f19;
+            margin-top: 10px;
+        }
         .hidden {
             display: none;
+        }
+        .loading-box, .result-box, .history-box {
+            text-align: center;
+        }
+        .spinner {
+            border: 4px solid #1a233a;
+            border-top: 4px solid #ffcc00;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -93,7 +115,7 @@
         <h1>🚀 Sapna Pura Karenge</h1>
         <div class="subtitle">APNA SAPNA PURA KARENGE</div>
 
-        <!-- STEP 1: LOGIN SECTION -->
+        <!-- 1. LOGIN SECTION -->
         <div id="login-section">
             <label>Mobile Number</label>
             <input type="text" class="input-box" id="mobile" placeholder="Apna mobile number daalein">
@@ -104,32 +126,71 @@
             <button class="btn" onclick="openStudio()">Login Karein</button>
         </div>
 
-        <!-- STEP 2: VIDEO STUDIO SECTION (Initially Hidden) -->
+        <!-- 2. VIDEO STUDIO SECTION -->
         <div id="studio-section" class="hidden">
             <h3 style="color: #ffcc00; text-align: center; font-size: 16px;">🎬 AI Video Studio</h3>
 
-            <label>1. Photo Upload (Optional - Plus (+) dabayein)</label>
+            <label>1. Hero / Character Name (Jo promote karega)</label>
+            <input type="text" id="heroName" class="input-box" placeholder="Jaise: Rohit, Tiger, ya koi bhi Hero ka naam">
+
+            <label>2. Photo Upload (Optional - Plus (+) dabayein)</label>
             <div class="upload-section" onclick="document.getElementById('fileInput').click()">
                 <div class="plus-icon">+</div>
-                <div style="font-size: 12px; color: #a0aec0; margin-top: 5px;">Gallery se photo chunein (Na dein toh AI khud banayega)</div>
+                <div style="font-size: 12px; color: #a0aec0; margin-top: 5px;">Gallery se photo chunein</div>
                 <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="previewImage()">
             </div>
             <div id="file-name" style="font-size: 12px; color: #00ffcc; text-align: center;"></div>
 
-            <label>2. Gaming App / Link Name</label>
-            <input type="text" class="input-box" placeholder="Jaise: Teen Patti Master / Telegram Link">
+            <label>3. Gaming App / Link Name</label>
+            <input type="text" id="gameName" class="input-box" placeholder="Jaise: Teen Patti Master / Telegram Link">
 
-            <label>3. Custom Script / Dialogue</label>
-            <textarea class="input-box" rows="3" placeholder="Jaise: Sign up karo, 199 bonus pao..."></textarea>
+            <label>4. Custom Script / Dialogue</label>
+            <textarea id="scriptText" class="input-box" rows="3" placeholder="Jaise: Sign up karo, 199 bonus pao..."></textarea>
 
-            <label>4. Video Action Style</label>
-            <select class="input-box">
+            <label>5. Voice / Aawaz Selection</label>
+            <select id="voiceChoice" class="input-box">
+                <option>Ladki ki Aawaz (Female AI Voice)</option>
+                <option>Ladke ki Aawaz (Male AI Voice)</option>
+            </select>
+
+            <label>6. Video Action Style</label>
+            <select id="actionStyle" class="input-box">
                 <option>Haath mein phone pakad kar promote kare</option>
                 <option>Dance karte hue ad dein</option>
                 <option>Background mein crowd/log khade hon</option>
             </select>
 
-            <button class="btn" onclick="generateVideo()">Video Banayein (Generate)</button>
+            <button class="btn" onclick="startGenerating()">Video Banayein (Generate)</button>
+            <button class="btn btn-share" onclick="showHistory()" style="background: #2d3748; color: #ffcc00; margin-top: 10px;">📊 Meri Ad History & Earning</button>
+        </div>
+
+        <!-- 3. LOADING / PROCESSING SECTION -->
+        <div id="loading-section" class="hidden loading-box">
+            <div class="spinner"></div>
+            <h3 style="color: #ffcc00;">Hero aur AI Video Taiyar Ho Rahi Hai...</h3>
+            <p style="color: #a0aec0; font-size: 13px;">Kripya thoda intezaar karein, hero aapki script aur style ke sath ad promote kar raha hai.</p>
+        </div>
+
+        <!-- 4. FINAL RESULT & DOWNLOAD SECTION -->
+        <div id="result-section" class="hidden result-box">
+            <h3 style="color: #00ffcc;">🎉 Aapki Hero Ad Taiyar Hai!</h3>
+            <div style="background: #1a233a; height: 180px; border-radius: 8px; display: flex; justify-content: center; align-items: center; border: 1px dashed #ffcc00; margin: 15px 0;">
+                <span style="color: #ffcc00; font-size: 14px;">▶ [ Hero AI Gaming Ad Preview ]</span>
+            </div>
+            <button class="btn" onclick="alert('Video Download ho gayi! Gallery mein check karein.')">📥 Download Video</button>
+            <button class="btn btn-share" onclick="alert('WhatsApp / Telegram par share karne ka link copy ho gaya!')">🔗 WhatsApp / Telegram par Share Karein</button>
+            <button class="btn" onclick="backToStudio()" style="background: #2d3748; color: white; margin-top: 10px;">⬅ Naya Ad Banayein</button>
+        </div>
+
+        <!-- 5. EARNINGS & HISTORY SECTION -->
+        <div id="history-section" class="hidden history-box">
+            <h3 style="color: #ffcc00;">📊 Ad History & Earning</h3>
+            <div style="background: #1a233a; padding: 15px; border-radius: 8px; text-align: left; margin: 15px 0; font-size: 14px;">
+                <p>📱 Total Videos Banayi: <span style="color: #00ffcc; float: right;">3 Ads</span></p>
+                <p>🔗 Link Clicks: <span style="color: #00ffcc; float: right;">142 Clicks</span></p>
+                <p>💰 Total Bonus/Earnings: <span style="color: #ffcc00; float: right;">₹597</span></p>
+            </div>
+            <button class="btn" onclick="backToStudio()">⬅ Studio Par Wapas Jayein</button>
         </div>
     </div>
 
@@ -152,13 +213,30 @@
             }
         }
 
-        function generateVideo() {
-            var fileInput = document.getElementById('fileInput');
-            if(fileInput.files.length > 0) {
-                alert("Photo mil gayi! AI aapki photo ke sath video taiyar kar raha hai...");
-            } else {
-                alert("Photo nahi di gayi! AI apne smart character ke sath script ke hisab se video bana raha hai...");
+        function startGenerating() {
+            var game = document.getElementById('gameName').value;
+            if(game === "") {
+                alert("Kripya Gaming App ya Link ka naam daalein!");
+                return;
             }
+            document.getElementById('studio-section').classList.add('hidden');
+            document.getElementById('loading-section').classList.remove('hidden');
+
+            setTimeout(function() {
+                document.getElementById('loading-section').classList.add('hidden');
+                document.getElementById('result-section').classList.remove('hidden');
+            }, 3000);
+        }
+
+        function showHistory() {
+            document.getElementById('studio-section').classList.add('hidden');
+            document.getElementById('history-section').classList.remove('hidden');
+        }
+
+        function backToStudio() {
+            document.getElementById('result-section').classList.add('hidden');
+            document.getElementById('history-section').classList.add('hidden');
+            document.getElementById('studio-section').classList.remove('hidden');
         }
     </script>
 
