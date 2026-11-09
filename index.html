@@ -172,7 +172,7 @@
         .hidden {
             display: none;
         }
-        .loading-box, .result-box, .history-box {
+        .loading-box, .result-box, .history-box, .dashboard-box {
             text-align: center;
         }
         .spinner {
@@ -219,19 +219,39 @@
             <label>Password</label>
             <input type="password" class="input-box" id="password" placeholder="Password daalein">
             
-            <button class="btn" style="margin-top: 15px;" onclick="openStudio()">Login Karein</button>
+            <button class="btn" style="margin-top: 15px;" onclick="openDashboard()">Login Karein</button>
         </div>
 
-        <!-- 2. VIDEO STUDIO SECTION -->
+        <!-- 2. MAIN APP DASHBOARD (Jiske andar app ke andar app khulega) -->
+        <div id="dashboard-section" class="hidden dashboard-box">
+            <h3 style="color: #ffcc00; font-size: 18px; margin-bottom: 5px;">📱 SPK Main Dashboard</h3>
+            <p style="color: #a0aec0; font-size: 13px; margin-bottom: 20px;">Aapke saare tools yahan hain:</p>
+            
+            <div style="background: #1a233a; padding: 15px; border-radius: 10px; border: 1px solid #ffcc00; margin-bottom: 15px; text-align: left;">
+                <h4 style="margin: 0 0 5px 0; color: #ffcc00; font-size: 15px;">🎬 Desi Video Studio App</h4>
+                <p style="margin: 0 0 10px 0; font-size: 12px; color: #cbd5e0;">Custom script aur photos se promotional video banayein.</p>
+                <button class="btn" style="padding: 8px; font-size: 14px;" onclick="openStudio()">App Kholein</button>
+            </div>
+
+            <!-- Future Apps Placeholder -->
+            <div style="background: #1a233a; padding: 15px; border-radius: 10px; border: 1px dashed #4a5568; margin-bottom: 15px; text-align: left; opacity: 0.7;">
+                <h4 style="margin: 0 0 5px 0; color: #a0aec0; font-size: 15px;">🚀 Future App (Coming Soon...)</h4>
+                <p style="margin: 0; font-size: 12px; color: #718096;">Yahan baad mein aur bhi naye apps jod sakte hain.</p>
+            </div>
+
+            <button class="btn btn-share" onclick="showHistory()">📊 Meri Ad History & Earning</button>
+        </div>
+
+        <!-- 3. VIDEO STUDIO SECTION -->
         <div id="studio-section" class="hidden">
-            <h3 style="color: #ffcc00; text-align: center; font-size: 16px; margin-bottom: 10px;">🎬 AI Video Studio</h3>
+            <h3 style="color: #ffcc00; text-align: center; font-size: 16px; margin-bottom: 10px;">🎬 Desi Video Studio</h3>
 
             <label>Video Title & Script (Apna promotion ya Hero / Game details likhein)</label>
             <div class="studio-box-wrapper">
                 <textarea id="scriptText" placeholder="Jaise: Mahakal Battle game, sign up karo 199 bonus pao, ya Salman Khan style mein promote karo..."></textarea>
                 <!-- Plus Button inside text box -->
-                <button class="plus-btn" onclick="document.getElementById('fileInput').click()" title="Gallery se Photo Jodein">+</button>
-                <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="previewImage()">
+                <button class="plus-btn" onclick="document.getElementById('fileInput').click()" title="Gallery se Photos Jodein">+</button>
+                <input type="file" id="fileInput" class="hidden" accept="image/*" multiple onchange="previewImages()">
             </div>
             <div id="file-name" style="font-size: 12px; color: #00ffcc; margin-bottom: 10px;"></div>
 
@@ -240,25 +260,22 @@
                 <button class="arrow-btn" onclick="startGenerating()" title="Generate">➔</button>
             </div>
 
-            <button class="btn btn-share" onclick="showHistory()">📊 Meri Ad History & Earning</button>
+            <button class="btn btn-share" onclick="backToDashboard()">⬅ Dashboard Par Wapas Jayein</button>
         </div>
 
-        <!-- 3. LOADING SECTION -->
+        <!-- 4. LOADING SECTION (4-5 Seconds) -->
         <div id="loading-section" class="hidden loading-box">
             <div class="spinner"></div>
-            <h3 id="loading-text" style="color: #ffcc00;">Aapki Photo aur Script Match Ho Rahi Hain...</h3>
+            <h3 id="loading-text" style="color: #ffcc00;">Aapki Photos aur Script Render Ho Rahi Hain...</h3>
             <p style="color: #a0aec0; font-size: 13px;">Kripya 4-5 second intezaar karein, ad taiyar ho rahi hai.</p>
         </div>
 
-        <!-- 4. FINAL RESULT & PAYMENT SECTION (NO MORE BILLI VIDEO!) -->
+        <!-- 5. FINAL RESULT & PAYMENT SECTION -->
         <div id="result-section" class="hidden result-box">
             <h3 style="color: #00ffcc;">🎉 Aapki Custom Ad Taiyar Hai!</h3>
             
-            <!-- Yeh hai user ki di gayi photo aur script ka live preview box -->
             <div style="background: #1a233a; padding: 15px; border-radius: 8px; border: 1px dashed #ffcc00; margin: 10px 0; text-align: center;">
-                <div id="previewImageContainer" style="margin-bottom: 10px;">
-                    <!-- Agar user ne photo di hogi toh yahan dikhegi -->
-                </div>
+                <div id="previewImageContainer" style="margin-bottom: 10px;"></div>
                 <p id="previewScriptText" style="color: #ffffff; font-size: 13px; font-style: italic; margin: 0;"></p>
             </div>
             
@@ -274,17 +291,17 @@
             </div>
 
             <button class="btn btn-share" onclick="alert('WhatsApp / Telegram share link copied!')">🔗 WhatsApp / Telegram par Share Karein</button>
-            <button class="btn" onclick="backToStudio()" style="background: #2d3748; color: white; margin-top: 10px;">⬅ Naya Ad Banayein</button>
+            <button class="btn" onclick="backToDashboard()" style="background: #2d3748; color: white; margin-top: 10px;">⬅ Dashboard Par Jayein</button>
         </div>
 
-        <!-- 5. EARNINGS & HISTORY SECTION -->
+        <!-- 6. EARNINGS & HISTORY SECTION -->
         <div id="history-section" class="hidden history-box">
             <h3 style="color: #ffcc00;">📊 Ad History & Earning</h3>
             <div style="background: #1a233a; padding: 15px; border-radius: 8px; text-align: left; margin: 15px 0; font-size: 14px;">
                 <p>📱 Total Videos Banayi: <span style="color: #00ffcc; float: right;">320 Ads</span></p>
                 <p>💰 Verified Earnings: <span style="color: #ffcc00; float: right;">₹1,600</span></p>
             </div>
-            <button class="btn" onclick="backToStudio()">⬅ Studio Par Wapas Jayein</button>
+            <button class="btn" onclick="backToDashboard()">⬅ Dashboard Par Wapas Jayein</button>
         </div>
 
         <div class="legal-footer">
@@ -295,25 +312,35 @@
     <script>
         let uploadedImageSrc = "";
 
-        function openStudio() {
+        function openDashboard() {
             var mob = document.getElementById('mobile').value;
             if(mob === "") {
                 alert("Pehle mobile number daalein!");
                 return;
             }
             document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('studio-section').classList.remove('active');
+            document.getElementById('dashboard-section').classList.remove('hidden');
+        }
+
+        function openStudio() {
+            document.getElementById('dashboard-section').classList.add('hidden');
             document.getElementById('studio-section').classList.remove('hidden');
         }
 
-        function previewImage() {
+        function backToDashboard() {
+            document.getElementById('studio-section').classList.add('hidden');
+            document.getElementById('result-section').classList.add('hidden');
+            document.getElementById('history-section').classList.add('hidden');
+            document.getElementById('dashboard-section').classList.remove('hidden');
+        }
+
+        function previewImages() {
             var fileInput = document.getElementById('fileInput');
             var fileNameDisplay = document.getElementById('file-name');
             if(fileInput.files.length > 0) {
                 let file = fileInput.files[0];
-                fileNameDisplay.innerHTML = "✓ Photo chuni gayi: " + file.name;
+                fileNameDisplay.innerHTML = "✓ " + fileInput.files.length + " photo(s) chuni gayi hain.";
                 
-                // Reader se photo ko temporary URL mein badalna taaki preview mein dikh sake
                 let reader = new FileReader();
                 reader.onload = function(e) {
                     uploadedImageSrc = e.target.result;
@@ -343,16 +370,14 @@
                 document.getElementById('loading-section').classList.add('hidden');
                 document.getElementById('result-section').classList.remove('hidden');
                 
-                // User ka likha hua text aur photo result screen par set karna
-                document.getElementById('previewScriptText.').innerText = "";
                 let textContainer = document.getElementById('previewScriptText');
-                textContainer.innerHTML = "💬 <b>Aapka Message:</b> " + script;
+                textContainer.innerHTML = "💬 <b>Aapka Message / Script:</b> " + script;
 
                 let imgContainer = document.getElementById('previewImageContainer');
                 if(uploadedImageSrc !== "") {
-                    imgContainer.innerHTML = `<img src="${uploadedImageSrc}" style="max-width:100%; max-height:120px; border-radius:6px; border:1px solid #ffcc00;">`;
+                    imgContainer.innerHTML = `<img src="${uploadedImageSrc}" style="max-width:100%; max-height:130px; border-radius:6px; border:1px solid #ffcc00;">`;
                 } else {
-                    imgContainer.innerHTML = `<span style="color: #a0aec0; font-size: 12px;">(Koi photo nahi chuni gayi - Text Ad)</span>`;
+                    imgContainer.innerHTML = `<span style="color: #a0aec0; font-size: 12px;">(Koi photo nahi chuni gayi - Sirf Text Ad)</span>`;
                 }
 
                 document.getElementById('payment-box').style.display = 'block';
@@ -381,18 +406,12 @@
         }
 
         function downloadVideoFile() {
-            alert('🎉 Ad Banner / Video Successfully Downloaded to your Phone Gallery!');
+            alert('🎉 Ad / Video Successfully Downloaded to your Phone Gallery!');
         }
 
         function showHistory() {
-            document.getElementById('studio-section').classList.add('hidden');
+            document.getElementById('dashboard-section').classList.add('hidden');
             document.getElementById('history-section').classList.remove('hidden');
-        }
-
-        function backToStudio() {
-            document.getElementById('result-section').classList.add('hidden');
-            document.getElementById('history-section').classList.add('hidden');
-            document.getElementById('studio-section').classList.remove('hidden');
         }
     </script>
 </body>
