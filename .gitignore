@@ -1,0 +1,5 @@
+# Temporary files and system caches
+.DS_Store
+Thumbs.db
+*.log
+node_modules/
