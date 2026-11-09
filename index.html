@@ -156,10 +156,10 @@
 
         <!-- 2. VIDEO STUDIO SECTION -->
         <div id="studio-section" class="hidden">
-            <h3 style="color: #ffcc00; text-align: center; font-size: 16px;">🎬 AI Video Studio</h3>
+            <h3 style="color: #ffcc00; text-align: center; font-size: 16px;">🎬 AI Video Studio (Hero Voice Match)</h3>
 
-            <label>1. Hero / Character Name</label>
-            <input type="text" id="heroName" class="input-box" placeholder="Jaise: Rohit, Tiger, ya koi bhi Hero">
+            <label>1. Hero / Character Name (Jaise: Salman Khan, SRK, Tiger)</label>
+            <input type="text" id="heroName" class="input-box" placeholder="Jis Hero ki aawaz chahiye uska naam likhein">
 
             <label>2. Photo Upload (Optional - Plus (+) dabayein)</label>
             <div class="upload-section" onclick="document.getElementById('fileInput').click()">
@@ -175,10 +175,12 @@
             <label>4. Custom Script / Dialogue</label>
             <textarea id="scriptText" class="input-box" rows="3" placeholder="Jaise: Sign up karo, 199 bonus pao..."></textarea>
 
-            <label>5. Voice Selection</label>
+            <label>5. Hero Voice Style (Auto-Matched by Name)</label>
             <select id="voiceChoice" class="input-box">
-                <option>Ladki ki Aawaz (Female AI Voice)</option>
-                <option>Ladke ki Aawaz (Male AI Voice)</option>
+                <option>Hero AI Voice (Salman / SRK Style Matching)</option>
+                <option>Heavy Action Hero Voice (Masss Style)</option>
+                <option>Stylish & Energetic Voice</option>
+                <option>Female AI Voice (Glamour Style)</option>
             </select>
 
             <label>6. Video Action Style</label>
@@ -195,15 +197,15 @@
         <!-- 3. LOADING SECTION -->
         <div id="loading-section" class="hidden loading-box">
             <div class="spinner"></div>
-            <h3 style="color: #ffcc00;">Hero aur AI Video Taiyar Ho Rahi Hai...</h3>
-            <p style="color: #a0aec0; font-size: 13px;">Kripya intezaar karein, video render ho rahi hai.</p>
+            <h3 id="loading-text" style="color: #ffcc00;">Hero ki Aawaz aur AI Video Match Ho Rahi Hai...</h3>
+            <p style="color: #a0aec0; font-size: 13px;">Kripya intezaar karein, selected hero ki style mein ad render ho rahi hai.</p>
         </div>
 
         <!-- 4. FINAL RESULT & DIRECT PAYMENT SECTION -->
         <div id="result-section" class="hidden result-box">
             <h3 style="color: #00ffcc;">🎉 Aapki Hero Ad Taiyar Hai!</h3>
             <div style="background: #1a233a; height: 140px; border-radius: 8px; display: flex; justify-content: center; align-items: center; border: 1px dashed #ffcc00; margin: 10px 0;">
-                <span style="color: #ffcc00; font-size: 14px;">▶ [ AI Gaming Ad Preview ]</span>
+                <span id="preview-title" style="color: #ffcc00; font-size: 14px;">▶ [ Hero Voice AI Ad Preview ]</span>
             </div>
             
             <!-- DIRECT UPI PAYMENT SECTION -->
@@ -257,8 +259,14 @@
         }
 
         function startGenerating() {
-            var game = document.getElementById('gameName').value;
+            var hero = document.getElementById('heroName').value.trim();
+            var game = document.getElementById('gameName').value.trim();
             var script = document.getElementById('scriptText').value.toLowerCase();
+
+            if(hero === "") {
+                alert("Kripya Hero ka naam daalein (Jaise: Salman Khan, SRK)!");
+                return;
+            }
 
             if(game === "") {
                 alert("Kripya Gaming App ya Link ka naam daalein!");
@@ -270,6 +278,10 @@
                 return;
             }
 
+            // Dynamic Hero Voice Text Update
+            document.getElementById('loading-text').innerText = "🎬 " + hero + " ki Aawaz & AI Video Match Ho Rahi Hai...";
+            document.getElementById('preview-title').innerText = "▶ [ " + hero + " Voice AI Gaming Ad ]";
+
             document.getElementById('studio-section').classList.add('hidden');
             document.getElementById('loading-section').classList.add('hidden');
             document.getElementById('loading-section').classList.remove('hidden');
@@ -277,7 +289,6 @@
             setTimeout(function() {
                 document.getElementById('loading-section').classList.add('hidden');
                 document.getElementById('result-section').classList.remove('hidden');
-                // Reset payment box state
                 document.getElementById('payment-box').style.display = 'block';
                 document.getElementById('download-area').classList.add('hidden');
             }, 3000);
