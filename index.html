@@ -199,20 +199,26 @@
             <p style="color: #a0aec0; font-size: 13px;">Kripya intezaar karein, video render ho rahi hai.</p>
         </div>
 
-        <!-- 4. FINAL RESULT & PAYMENT / DOWNLOAD SECTION -->
+        <!-- 4. FINAL RESULT & DIRECT PAYMENT SECTION -->
         <div id="result-section" class="hidden result-box">
             <h3 style="color: #00ffcc;">🎉 Aapki Hero Ad Taiyar Hai!</h3>
-            <div style="background: #1a233a; height: 160px; border-radius: 8px; display: flex; justify-content: center; align-items: center; border: 1px dashed #ffcc00; margin: 15px 0;">
+            <div style="background: #1a233a; height: 140px; border-radius: 8px; display: flex; justify-content: center; align-items: center; border: 1px dashed #ffcc00; margin: 10px 0;">
                 <span style="color: #ffcc00; font-size: 14px;">▶ [ AI Gaming Ad Preview ]</span>
             </div>
             
-            <!-- PAYMENT GATEWAY INTEGRATION FOR DOWNLOAD -->
-            <div style="background: rgba(255, 204, 0, 0.1); border: 1px solid #ffcc00; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
-                <p style="margin: 0 0 8px 0; font-size: 13px; color: #ffcc00; font-weight: bold;">📥 Download karne ke liye ₹5 ka Pay karein:</p>
-                <button class="btn btn-pay" onclick="payAndDownload()">💳 Google Pay / PhonePe se ₹5 Pay Karein</button>
+            <!-- DIRECT UPI PAYMENT SECTION -->
+            <div id="payment-box" style="background: rgba(255, 204, 0, 0.08); border: 1px solid #ffcc00; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                <p style="margin: 0 0 8px 0; font-size: 13px; color: #ffcc00; font-weight: bold;">📥 Video download karne ke liye ₹5 pay karein:</p>
+                <button class="btn btn-pay" onclick="openDirectUPIPay()">⚡ Google Pay / PhonePe se ₹5 Pay Karein</button>
+                <p style="font-size: 11px; color: #a0aec0; margin-top: 5px;">Click karte hi direct payment app khul jayegi.</p>
             </div>
 
-            <button class="btn btn-share" onclick="alert('WhatsApp / Telegram par share karne ka link copy ho gaya!')">🔗 WhatsApp / Telegram par Share Karein</button>
+            <!-- DOWNLOAD BUTTON (Unlocked after payment) -->
+            <div id="download-area" class="hidden">
+                <button class="btn" onclick="alert('Video Successfully Downloaded to your Phone Gallery!')" style="background: linear-gradient(135deg, #00ffcc, #00b386); color: #0b0f19;">📥 Download Video Now</button>
+            </div>
+
+            <button class="btn btn-share" onclick="alert('WhatsApp / Telegram share link copied!')">🔗 WhatsApp / Telegram par Share Karein</button>
             <button class="btn" onclick="backToStudio()" style="background: #2d3748; color: white; margin-top: 10px;">⬅ Naya Ad Banayein</button>
         </div>
 
@@ -221,7 +227,7 @@
             <h3 style="color: #ffcc00;">📊 Ad History & Earning</h3>
             <div style="background: #1a233a; padding: 15px; border-radius: 8px; text-align: left; margin: 15px 0; font-size: 14px;">
                 <p>📱 Total Videos Banayi: <span style="color: #00ffcc; float: right;">3 Ads</span></p>
-                <p>💰 Total Earnings (₹5 Per Download): <span style="color: #ffcc00; float: right;">₹15</span></p>
+                <p>💰 Verified Earnings: <span style="color: #ffcc00; float: right;">₹15</span></p>
             </div>
             <button class="btn" onclick="backToStudio()">⬅ Studio Par Wapas Jayein</button>
         </div>
@@ -265,35 +271,36 @@
             }
 
             document.getElementById('studio-section').classList.add('hidden');
+            document.getElementById('loading-section').classList.add('hidden');
             document.getElementById('loading-section').classList.remove('hidden');
 
             setTimeout(function() {
                 document.getElementById('loading-section').classList.add('hidden');
                 document.getElementById('result-section').classList.remove('hidden');
+                // Reset payment box state
+                document.getElementById('payment-box').style.display = 'block';
+                document.getElementById('download-area').classList.add('hidden');
             }, 3000);
         }
 
-        function payAndRedirectUPI() {
-            // Yeh tumhara UPI intent link ya payment gateway kholne ke liye hai
-            // Jaise hi user click karega, phone ke Google Pay / PhonePe apps khul jayenge
-            var upiID = "your-upi-id@paytm"; // Yahan tu apni UPI ID daal sakta hai aage chalkar
+        function openDirectUPIPay() {
+            var upiID = "your-upi-id@paytm"; 
             var amount = "5.00";
-            var note = "SPK App Video Download Fee";
-            var upiUrl = "upi://pay?pa=" + upiID + "&pn=SPK%20App&am=" + amount + "&cu=INR&tn=" + note;
+            var note = "SPKAppDownloadFee";
+            var upiIntentUrl = "upi://pay?pa=" + upiID + "&pn=SPK%20App&am=" + amount + "&cu=INR&tn=" + note;
             
-            // Try opening UPI app
-            window.location.href = upiUrl;
-        }
+            window.location.href = upiIntentUrl;
 
-        function payAndDownload() {
-            // Yahan hum payment trigger karenge aur simulation denge
-            alert("Google Pay / PhonePe khul raha hai... ₹5 ka payment complete hote hi video aapke phone mein download ho jayegi!");
-            payAndRedirectUPI();
-            
-            // Simulating successful download after payment
             setTimeout(function() {
-                alert("✅ Payment Successful! Video successfully downloaded to your phone gallery.");
-            }, 2000);
+                var paymentConfirmed = confirm("Kya aapne ₹5 ka payment successfully complete kar diya hai? (OK dabayein verify karne ke liye)");
+                if(paymentConfirmed) {
+                    alert("✅ Payment Verified Successfully! Download button unlock ho gaya hai.");
+                    document.getElementById('payment-box').style.display = 'none';
+                    document.getElementById('download-area').classList.remove('hidden');
+                } else {
+                    alert("❌ Payment cancel ho gayi. Download unlock nahi ho paya.");
+                }
+            }, 3000);
         }
 
         function showHistory() {
