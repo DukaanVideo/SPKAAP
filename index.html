@@ -76,7 +76,6 @@
             display: block;
             margin-top: 10px;
         }
-        /* Single Box + Plus Button Layout */
         .studio-box-wrapper {
             position: relative;
             margin: 8px 0;
@@ -201,13 +200,13 @@
 <body>
 
     <div class="container">
-        <!-- HEADER WITH HEART & SMALL SUBTITLE -->
+        <!-- HEADER -->
         <div class="header">
             <div class="heart-logo">❤️</div>
             <div class="app-title">Sapna Pura Karenge</div>
         </div>
         
-        <!-- SAFETY & CYBER CRIME WARNING -->
+        <!-- WARNING -->
         <div class="safety-badge">
             🛡️ Strict Legal Warning: Yeh app ka idea mera hai. Iska galat istemal karne par Cyber Crime ke tahat kanooni karwayi hogi.
         </div>
@@ -238,7 +237,6 @@
 
             <div class="generate-row">
                 <button class="btn" style="flex:1; margin-top:0;" onclick="startGenerating()">Video Banayein</button>
-                <!-- Arrow (Teer) Button -->
                 <button class="arrow-btn" onclick="startGenerating()" title="Generate">➔</button>
             </div>
 
@@ -248,17 +246,20 @@
         <!-- 3. LOADING SECTION -->
         <div id="loading-section" class="hidden loading-box">
             <div class="spinner"></div>
-            <h3 id="loading-text" style="color: #ffcc00;">Aapki Video aur Script Render Ho Rahi Hai...</h3>
-            <p style="color: #a0aec0; font-size: 13px;">Kripya 4-5 second intezaار karein, ad taiyar ho rahi hai.</p>
+            <h3 id="loading-text" style="color: #ffcc00;">Aapki Photo aur Script Match Ho Rahi Hain...</h3>
+            <p style="color: #a0aec0; font-size: 13px;">Kripya 4-5 second intezaar karein, ad taiyar ho rahi hai.</p>
         </div>
 
-        <!-- 4. FINAL RESULT & PAYMENT SECTION -->
+        <!-- 4. FINAL RESULT & PAYMENT SECTION (NO MORE BILLI VIDEO!) -->
         <div id="result-section" class="hidden result-box">
-            <h3 style="color: #00ffcc;">🎉 Aapki Ad Taiyar Hai!</h3>
-            <div style="background: #1a233a; height: 160px; border-radius: 8px; display: flex; justify-content: center; align-items: center; border: 1px dashed #ffcc00; margin: 10px 0; overflow: hidden;">
-                <video id="outputVideo" controls style="width:100%; height:100%; object-fit:cover;">
-                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                </video>
+            <h3 style="color: #00ffcc;">🎉 Aapki Custom Ad Taiyar Hai!</h3>
+            
+            <!-- Yeh hai user ki di gayi photo aur script ka live preview box -->
+            <div style="background: #1a233a; padding: 15px; border-radius: 8px; border: 1px dashed #ffcc00; margin: 10px 0; text-align: center;">
+                <div id="previewImageContainer" style="margin-bottom: 10px;">
+                    <!-- Agar user ne photo di hogi toh yahan dikhegi -->
+                </div>
+                <p id="previewScriptText" style="color: #ffffff; font-size: 13px; font-style: italic; margin: 0;"></p>
             </div>
             
             <!-- DIRECT UPI PAYMENT SECTION -->
@@ -292,6 +293,8 @@
     </div>
 
     <script>
+        let uploadedImageSrc = "";
+
         function openStudio() {
             var mob = document.getElementById('mobile').value;
             if(mob === "") {
@@ -299,6 +302,7 @@
                 return;
             }
             document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('studio-section').classList.remove('active');
             document.getElementById('studio-section').classList.remove('hidden');
         }
 
@@ -306,7 +310,15 @@
             var fileInput = document.getElementById('fileInput');
             var fileNameDisplay = document.getElementById('file-name');
             if(fileInput.files.length > 0) {
-                fileNameDisplay.innerHTML = "✓ Photo chuni gayi: " + fileInput.files[0].name;
+                let file = fileInput.files[0];
+                fileNameDisplay.innerHTML = "✓ Photo chuni gayi: " + file.name;
+                
+                // Reader se photo ko temporary URL mein badalna taaki preview mein dikh sake
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImageSrc = e.target.result;
+                }
+                reader.readAsDataURL(file);
             }
         }
 
@@ -330,6 +342,19 @@
             setTimeout(function() {
                 document.getElementById('loading-section').classList.add('hidden');
                 document.getElementById('result-section').classList.remove('hidden');
+                
+                // User ka likha hua text aur photo result screen par set karna
+                document.getElementById('previewScriptText.').innerText = "";
+                let textContainer = document.getElementById('previewScriptText');
+                textContainer.innerHTML = "💬 <b>Aapka Message:</b> " + script;
+
+                let imgContainer = document.getElementById('previewImageContainer');
+                if(uploadedImageSrc !== "") {
+                    imgContainer.innerHTML = `<img src="${uploadedImageSrc}" style="max-width:100%; max-height:120px; border-radius:6px; border:1px solid #ffcc00;">`;
+                } else {
+                    imgContainer.innerHTML = `<span style="color: #a0aec0; font-size: 12px;">(Koi photo nahi chuni gayi - Text Ad)</span>`;
+                }
+
                 document.getElementById('payment-box').style.display = 'block';
                 document.getElementById('download-area').classList.add('hidden');
             }, 4500);
@@ -356,13 +381,7 @@
         }
 
         function downloadVideoFile() {
-            let a = document.createElement('a');
-            a.href = "https://www.w3schools.com/html/mov_bbb.mp4";
-            a.download = "SapnaPuraKarenge_Video.mp4";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            alert('Video Successfully Downloaded to your Phone Gallery!');
+            alert('🎉 Ad Banner / Video Successfully Downloaded to your Phone Gallery!');
         }
 
         function showHistory() {
