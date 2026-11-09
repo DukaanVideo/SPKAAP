@@ -10,47 +10,69 @@
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
         }
         .container {
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             background: #131b2e;
-            padding: 30px;
+            padding: 25px;
             border-radius: 16px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
             border: 1px solid #ffcc00;
-            text-align: center;
         }
         h1 {
             color: #ffcc00;
-            font-size: 24px;
-            margin-bottom: 10px;
+            font-size: 22px;
+            text-align: center;
+            margin-bottom: 5px;
             text-transform: uppercase;
         }
-        p {
+        .subtitle {
             color: #a0aec0;
-            font-size: 14px;
-            margin-bottom: 25px;
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 20px;
         }
-        .input-box {
+        .input-box, textarea, select {
             width: 100%;
-            padding: 12px;
-            margin: 10px 0;
+            padding: 10px;
+            margin: 8px 0;
             background: #1a233a;
             border: 1px solid #2d3748;
             border-radius: 8px;
             color: white;
-            font-size: 16px;
+            font-size: 14px;
             box-sizing: border-box;
+        }
+        label {
+            font-size: 13px;
+            color: #ffcc00;
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        .upload-section {
+            border: 2px dashed #ffcc00;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            background: #1a233a;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        .plus-icon {
+            font-size: 24px;
+            color: #ffcc00;
+            font-weight: bold;
         }
         .btn {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             background: linear-gradient(135deg, #ffcc00, #ff9900);
             border: none;
             border-radius: 8px;
@@ -59,10 +81,9 @@
             font-weight: bold;
             cursor: pointer;
             margin-top: 20px;
-            transition: 0.3s;
         }
-        .btn:hover {
-            opacity: 0.9;
+        .hidden {
+            display: none;
         }
     </style>
 </head>
@@ -70,14 +91,76 @@
 
     <div class="container">
         <h1>🚀 Sapna Pura Karenge</h1>
-        <p>Apna Gaming Ad Khud Banayein</p>
-        
-        <!-- Login Form (No OTP, Simple Number & Password) -->
-        <input type="text" class="input-box" placeholder="Mobile Number daalein" required>
-        <input type="password" class="input-box" placeholder="Password daalein" required>
-        
-        <button class="btn" onclick="alert('Login Successful! Studio khul raha hai...')">Login Karein</button>
+        <div class="subtitle">APNA SAPNA PURA KARENGE</div>
+
+        <!-- STEP 1: LOGIN SECTION -->
+        <div id="login-section">
+            <label>Mobile Number</label>
+            <input type="text" class="input-box" id="mobile" placeholder="Apna mobile number daalein">
+            
+            <label>Password</label>
+            <input type="password" class="input-box" id="password" placeholder="Password daalein">
+            
+            <button class="btn" onclick="openStudio()">Login Karein</button>
+        </div>
+
+        <!-- STEP 2: VIDEO STUDIO SECTION (Initially Hidden) -->
+        <div id="studio-section" class="hidden">
+            <h3 style="color: #ffcc00; text-align: center; font-size: 16px;">🎬 AI Video Studio</h3>
+
+            <label>1. Photo Upload (Optional - Plus (+) dabayein)</label>
+            <div class="upload-section" onclick="document.getElementById('fileInput').click()">
+                <div class="plus-icon">+</div>
+                <div style="font-size: 12px; color: #a0aec0; margin-top: 5px;">Gallery se photo chunein (Na dein toh AI khud banayega)</div>
+                <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="previewImage()">
+            </div>
+            <div id="file-name" style="font-size: 12px; color: #00ffcc; text-align: center;"></div>
+
+            <label>2. Gaming App / Link Name</label>
+            <input type="text" class="input-box" placeholder="Jaise: Teen Patti Master / Telegram Link">
+
+            <label>3. Custom Script / Dialogue</label>
+            <textarea class="input-box" rows="3" placeholder="Jaise: Sign up karo, 199 bonus pao..."></textarea>
+
+            <label>4. Video Action Style</label>
+            <select class="input-box">
+                <option>Haath mein phone pakad kar promote kare</option>
+                <option>Dance karte hue ad dein</option>
+                <option>Background mein crowd/log khade hon</option>
+            </select>
+
+            <button class="btn" onclick="generateVideo()">Video Banayein (Generate)</button>
+        </div>
     </div>
+
+    <script>
+        function openStudio() {
+            var mob = document.getElementById('mobile').value;
+            if(mob === "") {
+                alert("Pehle mobile number daalein!");
+                return;
+            }
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('studio-section').classList.remove('hidden');
+        }
+
+        function previewImage() {
+            var fileInput = document.getElementById('fileInput');
+            var fileNameDisplay = document.getElementById('file-name');
+            if(fileInput.files.length > 0) {
+                fileNameDisplay.innerHTML = "Selected Photo: " + fileInput.files[0].name;
+            }
+        }
+
+        function generateVideo() {
+            var fileInput = document.getElementById('fileInput');
+            if(fileInput.files.length > 0) {
+                alert("Photo mil gayi! AI aapki photo ke sath video taiyar kar raha hai...");
+            } else {
+                alert("Photo nahi di gayi! AI apne smart character ke sath script ke hisab se video bana raha hai...");
+            }
+        }
+    </script>
 
 </body>
 </html>
