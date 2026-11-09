@@ -229,7 +229,7 @@
             
             <div style="background: #1a233a; padding: 15px; border-radius: 10px; border: 1px solid #ffcc00; margin-bottom: 15px; text-align: left;">
                 <h4 style="margin: 0 0 5px 0; color: #ffcc00; font-size: 15px;">🎬 Desi Video Studio App</h4>
-                <p style="margin: 0 0 10px 0; font-size: 12px; color: #cbd5e0;">Custom script aur photos se live video banayein.</p>
+                <p style="margin: 0 0 10px 0; font-size: 12px; color: #cbd5e0;">Multiple photos aur script se Dhaansu Video banayein.</p>
                 <button class="btn" style="padding: 8px; font-size: 14px;" onclick="openStudio()">App Kholein</button>
             </div>
 
@@ -240,16 +240,20 @@
         <div id="studio-section" class="hidden">
             <h3 style="color: #ffcc00; text-align: center; font-size: 16px; margin-bottom: 10px;">🎬 Desi Video Studio</h3>
 
-            <label>Video Script / Style (Jaise: Salman Khan style, Mahakal Battle, etc.)</label>
+            <label>Video Script / Style (JCB, Game ya Hero style likhein)</label>
             <div class="studio-box-wrapper">
-                <textarea id="scriptText" placeholder="Yahan apni script ya hero style likhein..."></textarea>
-                <button class="plus-btn" onclick="document.getElementById('fileInput').click()" title="Gallery se Photo Jodein">+</button>
-                <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="previewImages()">
+                <textarea id="scriptText" placeholder="Jaise: JCB promotion, Salman Khan style, ya Mahakal Battle..."></textarea>
+                <!-- Plus Button -->
+                <button class="plus-btn" onclick="document.getElementById('fileInput').click()" title="Gallery se Photos Jodein">+</button>
+                <input type="file" id="fileInput" class="hidden" accept="image/*" multiple onchange="previewImages()">
             </div>
-            <div id="file-name" style="font-size: 12px; color: #00ffcc; margin-bottom: 10px;"></div>
+            
+            <!-- Live Photos Counter & Preview Container -->
+            <div id="file-name" style="font-size: 12px; color: #00ffcc; margin-bottom: 5px; font-weight: bold;"></div>
+            <div id="selectedImagesPreview" style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; padding: 4px 0;"></div>
 
             <div class="generate-row">
-                <button class="btn" style="flex:1; margin-top:0;" onclick="startGenerating()">Video Banayein</button>
+                <button class="btn" style="flex:1; margin-top:0;" onclick="startGenerating()">Dhaansu Video Banayein</button>
                 <button class="arrow-btn" onclick="startGenerating()" title="Generate">➔</button>
             </div>
 
@@ -259,16 +263,16 @@
         <!-- 4. LOADING SECTION -->
         <div id="loading-section" class="hidden loading-box">
             <div class="spinner"></div>
-            <h3 id="loading-text" style="color: #ffcc00;">Video Render ho rahi hai...</h3>
-            <p style="color: #a0aec0; font-size: 13px;">Kripya thoda intezaar karein, aapki custom video taiyar ho rahi hai.</p>
+            <h3 id="loading-text" style="color: #ffcc00;">Saari Photos aur Script Render Ho Rahi Hain...</h3>
+            <p style="color: #a0aec0; font-size: 13px;">Kripya 4-5 second intezaar karein, video taiyar ho rahi hai.</p>
         </div>
 
-        <!-- Hidden Canvas for Video Rendering -->
+        <!-- Hidden Canvas for Real Video Recording -->
         <canvas id="videoCanvas" width="720" height="1280" class="hidden"></canvas>
 
         <!-- 5. FINAL RESULT & PAYMENT LOCK SECTION -->
         <div id="result-section" class="hidden result-box">
-            <h3 style="color: #00ffcc;">🎉 Aapki Video Taiyar Hai!</h3>
+            <h3 style="color: #00ffcc;">🎉 Aapki Dhaansu Video Taiyar Hai!</h3>
             
             <div style="background: #1a233a; padding: 15px; border-radius: 8px; border: 1px dashed #ffcc00; margin: 10px 0; text-align: center;">
                 <video id="finalVideoPreview" controls style="max-width:100%; max-height:220px; border-radius:6px; border:1px solid #ffcc00;"></video>
@@ -282,7 +286,7 @@
 
             <!-- UNLOCKED DOWNLOAD AREA -->
             <div id="download-area" class="hidden">
-                <a id="downloadLink" download="SPK_Custom_Video.webm" class="btn" style="background: linear-gradient(135deg, #00ffcc, #00b386); color: #0b0f19; text-decoration:none; display:block; text-align:center;">📥 Download Video to Gallery (Unlocked)</a>
+                <a id="downloadLink" download="SPK_Dhaansu_Video.webm" class="btn" style="background: linear-gradient(135deg, #00ffcc, #00b386); color: #0b0f19; text-decoration:none; display:block; text-align:center;">📥 Download Video to Gallery (Unlocked)</a>
             </div>
 
             <button class="btn btn-share" onclick="alert('WhatsApp / Telegram share link copied!')">🔗 Share Karein</button>
@@ -305,7 +309,7 @@
     </div>
 
     <script>
-        let uploadedImageObj = null;
+        let uploadedImageObjects = [];
         let recordedVideoBlob = null;
         let userEarnings = 1600;
         let totalVideos = 320;
@@ -332,19 +336,41 @@
             document.getElementById('dashboard-section').classList.remove('hidden');
         }
 
+        // Multiple Photos Preview Logic
         function previewImages() {
             var fileInput = document.getElementById('fileInput');
             var fileNameDisplay = document.getElementById('file-name');
+            var previewContainer = document.getElementById('selectedImagesPreview');
+            
+            previewContainer.innerHTML = "";
+            uploadedImageObjects = [];
+
             if(fileInput.files.length > 0) {
-                let file = fileInput.files[0];
-                fileNameDisplay.innerHTML = "✓ Photo chuni gayi hai.";
-                
-                let reader = new FileReader();
-                reader.onload = function(e) {
-                    uploadedImageObj = new Image();
-                    uploadedImageObj.src = e.target.result;
+                let totalFiles = fileInput.files.length;
+                fileNameDisplay.innerHTML = `✓ ${totalFiles} photo(s) chun li gayi hain:`;
+
+                for(let i = 0; i < totalFiles; i++) {
+                    let file = fileInput.files[i];
+                    let reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        // Display thumbnail on screen
+                        let imgThumb = document.createElement('img');
+                        imgThumb.src = e.target.result;
+                        imgThumb.style.width = "50px";
+                        imgThumb.style.height = "50px";
+                        imgThumb.style.objectFit = "cover";
+                        imgThumb.style.borderRadius = "6px";
+                        imgThumb.style.border = "1px solid #ffcc00";
+                        previewContainer.appendChild(imgThumb);
+
+                        // Save Image Object for Video Generation
+                        let imgObj = new Image();
+                        imgObj.src = e.target.result;
+                        uploadedImageObjects.push(imgObj);
+                    }
+                    reader.readAsDataURL(file);
                 }
-                reader.readAsDataURL(file);
             }
         }
 
@@ -352,7 +378,7 @@
             var script = document.getElementById('scriptText').value.trim();
 
             if(script === "") {
-                alert("Kripya script ya style mein kuch likhein!");
+                alert("Kripya script ya category mein kuch likhein!");
                 return;
             }
 
@@ -373,7 +399,6 @@
                     let downloadLink = document.getElementById('downloadLink');
                     downloadLink.href = videoUrl;
 
-                    // Reset payment lock for every new video generated!
                     document.getElementById('payment-box').style.display = 'block';
                     document.getElementById('download-area').classList.add('hidden');
                 });
@@ -405,7 +430,7 @@
             recorder.start();
 
             let frameCount = 0;
-            const totalFrames = 120; // ~4 seconds video
+            const totalFrames = 150; // ~5 seconds video for smooth slideshow
 
             function drawFrame() {
                 let grad = ctx.createLinearGradient(0, 0, 0, 1280);
@@ -419,8 +444,13 @@
                 ctx.textAlign = "center";
                 ctx.fillText("❤️ SAPNA PURA KARENGE (SPK)", 360, 90);
 
-                if (uploadedImageObj && uploadedImageObj.complete) {
-                    ctx.drawImage(uploadedImageObj, 110, 150, 500, 500);
+                // Multiple Photos Slideshow Logic inside Video
+                if (uploadedImageObjects.length > 0) {
+                    let imgIndex = Math.floor(frameCount / 30) % uploadedImageObjects.length;
+                    let activeImg = uploadedImageObjects[imgIndex];
+                    if (activeImg && activeImg.complete) {
+                        ctx.drawImage(activeImg, 110, 150, 500, 500);
+                    }
                 } else {
                     ctx.fillStyle = "#1a233a";
                     ctx.fillRect(110, 150, 500, 500);
@@ -429,6 +459,7 @@
                     ctx.fillText("(No Image Uploaded)", 360, 400);
                 }
 
+                // Script Box
                 ctx.fillStyle = "#1a233a";
                 ctx.fillRect(50, 680, 620, 480);
                 ctx.strokeStyle = "#ffcc00";
@@ -483,7 +514,6 @@
                     document.getElementById('payment-box').style.display = 'none';
                     document.getElementById('download-area').classList.remove('hidden');
 
-                    // Update Earnings Counter
                     totalVideos++;
                     userEarnings += 5;
                     document.getElementById('totalVideosCount').innerText = totalVideos;
