@@ -37,7 +37,19 @@
             color: #a0aec0;
             font-size: 13px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+        }
+        .safety-badge {
+            background: rgba(255, 77, 77, 0.15);
+            border: 1px solid #ff4d4d;
+            color: #ff4d4d;
+            font-size: 11px;
+            padding: 8px;
+            border-radius: 6px;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+            line-height: 1.4;
         }
         .input-box, textarea, select {
             width: 100%;
@@ -81,11 +93,15 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 15px;
         }
-        .btn-share {
+        .btn-pay {
             background: linear-gradient(135deg, #00ffcc, #00b386);
             color: #0b0f19;
+        }
+        .btn-share {
+            background: #2d3748;
+            color: #ffcc00;
             margin-top: 10px;
         }
         .hidden {
@@ -107,6 +123,13 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        .legal-footer {
+            font-size: 10px;
+            color: #718096;
+            text-align: center;
+            margin-top: 20px;
+            line-height: 1.3;
+        }
     </style>
 </head>
 <body>
@@ -114,6 +137,11 @@
     <div class="container">
         <h1>🚀 Sapna Pura Karenge</h1>
         <div class="subtitle">APNA SAPNA PURA KARENGE</div>
+        
+        <!-- SAFETY & CYBER CRIME WARNING -->
+        <div class="safety-badge">
+            🛡️ Strict Legal Warning: Yeh app ka idea mera hai. Iska galat istemal (fraud/spam) karne par Cyber Crime ke tahat kanooni karwayi hogi aur account ban hoga.
+        </div>
 
         <!-- 1. LOGIN SECTION -->
         <div id="login-section">
@@ -130,8 +158,8 @@
         <div id="studio-section" class="hidden">
             <h3 style="color: #ffcc00; text-align: center; font-size: 16px;">🎬 AI Video Studio</h3>
 
-            <label>1. Hero / Character Name (Jo promote karega)</label>
-            <input type="text" id="heroName" class="input-box" placeholder="Jaise: Rohit, Tiger, ya koi bhi Hero ka naam">
+            <label>1. Hero / Character Name</label>
+            <input type="text" id="heroName" class="input-box" placeholder="Jaise: Rohit, Tiger, ya koi bhi Hero">
 
             <label>2. Photo Upload (Optional - Plus (+) dabayein)</label>
             <div class="upload-section" onclick="document.getElementById('fileInput').click()">
@@ -147,7 +175,7 @@
             <label>4. Custom Script / Dialogue</label>
             <textarea id="scriptText" class="input-box" rows="3" placeholder="Jaise: Sign up karo, 199 bonus pao..."></textarea>
 
-            <label>5. Voice / Aawaz Selection</label>
+            <label>5. Voice Selection</label>
             <select id="voiceChoice" class="input-box">
                 <option>Ladki ki Aawaz (Female AI Voice)</option>
                 <option>Ladke ki Aawaz (Male AI Voice)</option>
@@ -161,23 +189,29 @@
             </select>
 
             <button class="btn" onclick="startGenerating()">Video Banayein (Generate)</button>
-            <button class="btn btn-share" onclick="showHistory()" style="background: #2d3748; color: #ffcc00; margin-top: 10px;">📊 Meri Ad History & Earning</button>
+            <button class="btn btn-share" onclick="showHistory()">📊 Meri Ad History & Earning</button>
         </div>
 
-        <!-- 3. LOADING / PROCESSING SECTION -->
+        <!-- 3. LOADING SECTION -->
         <div id="loading-section" class="hidden loading-box">
             <div class="spinner"></div>
             <h3 style="color: #ffcc00;">Hero aur AI Video Taiyar Ho Rahi Hai...</h3>
-            <p style="color: #a0aec0; font-size: 13px;">Kripya thoda intezaar karein, hero aapki script aur style ke sath ad promote kar raha hai.</p>
+            <p style="color: #a0aec0; font-size: 13px;">Kripya intezaar karein, video render ho rahi hai.</p>
         </div>
 
-        <!-- 4. FINAL RESULT & DOWNLOAD SECTION -->
+        <!-- 4. FINAL RESULT & PAYMENT / DOWNLOAD SECTION -->
         <div id="result-section" class="hidden result-box">
             <h3 style="color: #00ffcc;">🎉 Aapki Hero Ad Taiyar Hai!</h3>
-            <div style="background: #1a233a; height: 180px; border-radius: 8px; display: flex; justify-content: center; align-items: center; border: 1px dashed #ffcc00; margin: 15px 0;">
-                <span style="color: #ffcc00; font-size: 14px;">▶ [ Hero AI Gaming Ad Preview ]</span>
+            <div style="background: #1a233a; height: 160px; border-radius: 8px; display: flex; justify-content: center; align-items: center; border: 1px dashed #ffcc00; margin: 15px 0;">
+                <span style="color: #ffcc00; font-size: 14px;">▶ [ AI Gaming Ad Preview ]</span>
             </div>
-            <button class="btn" onclick="alert('Video Download ho gayi! Gallery mein check karein.')">📥 Download Video</button>
+            
+            <!-- PAYMENT GATEWAY INTEGRATION FOR DOWNLOAD -->
+            <div style="background: rgba(255, 204, 0, 0.1); border: 1px solid #ffcc00; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                <p style="margin: 0 0 8px 0; font-size: 13px; color: #ffcc00; font-weight: bold;">📥 Download karne ke liye ₹5 ka Pay karein:</p>
+                <button class="btn btn-pay" onclick="payAndDownload()">💳 Google Pay / PhonePe se ₹5 Pay Karein</button>
+            </div>
+
             <button class="btn btn-share" onclick="alert('WhatsApp / Telegram par share karne ka link copy ho gaya!')">🔗 WhatsApp / Telegram par Share Karein</button>
             <button class="btn" onclick="backToStudio()" style="background: #2d3748; color: white; margin-top: 10px;">⬅ Naya Ad Banayein</button>
         </div>
@@ -187,10 +221,13 @@
             <h3 style="color: #ffcc00;">📊 Ad History & Earning</h3>
             <div style="background: #1a233a; padding: 15px; border-radius: 8px; text-align: left; margin: 15px 0; font-size: 14px;">
                 <p>📱 Total Videos Banayi: <span style="color: #00ffcc; float: right;">3 Ads</span></p>
-                <p>🔗 Link Clicks: <span style="color: #00ffcc; float: right;">142 Clicks</span></p>
-                <p>💰 Total Bonus/Earnings: <span style="color: #ffcc00; float: right;">₹597</span></p>
+                <p>💰 Total Earnings (₹5 Per Download): <span style="color: #ffcc00; float: right;">₹15</span></p>
             </div>
             <button class="btn" onclick="backToStudio()">⬅ Studio Par Wapas Jayein</button>
+        </div>
+
+        <div class="legal-footer">
+            © Sapna Pura Karenge (SPK App). All Rights Reserved.<br>Original Creator App - Misuse is strictly punishable under Cyber Crime Law.
         </div>
     </div>
 
@@ -215,10 +252,18 @@
 
         function startGenerating() {
             var game = document.getElementById('gameName').value;
+            var script = document.getElementById('scriptText').value.toLowerCase();
+
             if(game === "") {
                 alert("Kripya Gaming App ya Link ka naam daalein!");
                 return;
             }
+
+            if(script.includes("gali") || script.includes("fraud") || script.includes("cheat")) {
+                alert("⚠️ Warning: Cyber Crime rules ke khilaf abusive script allowed nahi hai!");
+                return;
+            }
+
             document.getElementById('studio-section').classList.add('hidden');
             document.getElementById('loading-section').classList.remove('hidden');
 
@@ -226,6 +271,29 @@
                 document.getElementById('loading-section').classList.add('hidden');
                 document.getElementById('result-section').classList.remove('hidden');
             }, 3000);
+        }
+
+        function payAndRedirectUPI() {
+            // Yeh tumhara UPI intent link ya payment gateway kholne ke liye hai
+            // Jaise hi user click karega, phone ke Google Pay / PhonePe apps khul jayenge
+            var upiID = "your-upi-id@paytm"; // Yahan tu apni UPI ID daal sakta hai aage chalkar
+            var amount = "5.00";
+            var note = "SPK App Video Download Fee";
+            var upiUrl = "upi://pay?pa=" + upiID + "&pn=SPK%20App&am=" + amount + "&cu=INR&tn=" + note;
+            
+            // Try opening UPI app
+            window.location.href = upiUrl;
+        }
+
+        function payAndDownload() {
+            // Yahan hum payment trigger karenge aur simulation denge
+            alert("Google Pay / PhonePe khul raha hai... ₹5 ka payment complete hote hi video aapke phone mein download ho jayegi!");
+            payAndRedirectUPI();
+            
+            // Simulating successful download after payment
+            setTimeout(function() {
+                alert("✅ Payment Successful! Video successfully downloaded to your phone gallery.");
+            }, 2000);
         }
 
         function showHistory() {
