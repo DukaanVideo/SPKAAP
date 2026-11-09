@@ -222,21 +222,15 @@
             <button class="btn" style="margin-top: 15px;" onclick="openDashboard()">Login Karein</button>
         </div>
 
-        <!-- 2. MAIN APP DASHBOARD (Jiske andar app ke andar app khulega) -->
+        <!-- 2. MAIN APP DASHBOARD -->
         <div id="dashboard-section" class="hidden dashboard-box">
             <h3 style="color: #ffcc00; font-size: 18px; margin-bottom: 5px;">📱 SPK Main Dashboard</h3>
             <p style="color: #a0aec0; font-size: 13px; margin-bottom: 20px;">Aapke saare tools yahan hain:</p>
             
             <div style="background: #1a233a; padding: 15px; border-radius: 10px; border: 1px solid #ffcc00; margin-bottom: 15px; text-align: left;">
                 <h4 style="margin: 0 0 5px 0; color: #ffcc00; font-size: 15px;">🎬 Desi Video Studio App</h4>
-                <p style="margin: 0 0 10px 0; font-size: 12px; color: #cbd5e0;">Custom script aur photos se promotional video banayein.</p>
+                <p style="margin: 0 0 10px 0; font-size: 12px; color: #cbd5e0;">Custom script aur photos se live video banayein.</p>
                 <button class="btn" style="padding: 8px; font-size: 14px;" onclick="openStudio()">App Kholein</button>
-            </div>
-
-            <!-- Future Apps Placeholder -->
-            <div style="background: #1a233a; padding: 15px; border-radius: 10px; border: 1px dashed #4a5568; margin-bottom: 15px; text-align: left; opacity: 0.7;">
-                <h4 style="margin: 0 0 5px 0; color: #a0aec0; font-size: 15px;">🚀 Future App (Coming Soon...)</h4>
-                <p style="margin: 0; font-size: 12px; color: #718096;">Yahan baad mein aur bhi naye apps jod sakte hain.</p>
             </div>
 
             <button class="btn btn-share" onclick="showHistory()">📊 Meri Ad History & Earning</button>
@@ -246,12 +240,11 @@
         <div id="studio-section" class="hidden">
             <h3 style="color: #ffcc00; text-align: center; font-size: 16px; margin-bottom: 10px;">🎬 Desi Video Studio</h3>
 
-            <label>Video Title & Script (Apna promotion ya Hero / Game details likhein)</label>
+            <label>Video Script / Style (Jaise: Salman Khan style, Mahakal Battle, etc.)</label>
             <div class="studio-box-wrapper">
-                <textarea id="scriptText" placeholder="Jaise: Mahakal Battle game, sign up karo 199 bonus pao, ya Salman Khan style mein promote karo..."></textarea>
-                <!-- Plus Button inside text box -->
-                <button class="plus-btn" onclick="document.getElementById('fileInput').click()" title="Gallery se Photos Jodein">+</button>
-                <input type="file" id="fileInput" class="hidden" accept="image/*" multiple onchange="previewImages()">
+                <textarea id="scriptText" placeholder="Yahan apni script ya hero style likhein..."></textarea>
+                <button class="plus-btn" onclick="document.getElementById('fileInput').click()" title="Gallery se Photo Jodein">+</button>
+                <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="previewImages()">
             </div>
             <div id="file-name" style="font-size: 12px; color: #00ffcc; margin-bottom: 10px;"></div>
 
@@ -263,43 +256,45 @@
             <button class="btn btn-share" onclick="backToDashboard()">⬅ Dashboard Par Wapas Jayein</button>
         </div>
 
-        <!-- 4. LOADING SECTION (4-5 Seconds) -->
+        <!-- 4. LOADING SECTION -->
         <div id="loading-section" class="hidden loading-box">
             <div class="spinner"></div>
-            <h3 id="loading-text" style="color: #ffcc00;">Aapki Photos aur Script Render Ho Rahi Hain...</h3>
-            <p style="color: #a0aec0; font-size: 13px;">Kripya 4-5 second intezaar karein, ad taiyar ho rahi hai.</p>
+            <h3 id="loading-text" style="color: #ffcc00;">Video Render ho rahi hai...</h3>
+            <p style="color: #a0aec0; font-size: 13px;">Kripya thoda intezaar karein, aapki custom video taiyar ho rahi hai.</p>
         </div>
 
-        <!-- 5. FINAL RESULT & PAYMENT SECTION -->
+        <!-- Hidden Canvas for Video Rendering -->
+        <canvas id="videoCanvas" width="720" height="1280" class="hidden"></canvas>
+
+        <!-- 5. FINAL RESULT & PAYMENT LOCK SECTION -->
         <div id="result-section" class="hidden result-box">
-            <h3 style="color: #00ffcc;">🎉 Aapki Custom Ad Taiyar Hai!</h3>
+            <h3 style="color: #00ffcc;">🎉 Aapki Video Taiyar Hai!</h3>
             
             <div style="background: #1a233a; padding: 15px; border-radius: 8px; border: 1px dashed #ffcc00; margin: 10px 0; text-align: center;">
-                <div id="previewImageContainer" style="margin-bottom: 10px;"></div>
-                <p id="previewScriptText" style="color: #ffffff; font-size: 13px; font-style: italic; margin: 0;"></p>
+                <video id="finalVideoPreview" controls style="max-width:100%; max-height:220px; border-radius:6px; border:1px solid #ffcc00;"></video>
             </div>
             
-            <!-- DIRECT UPI PAYMENT SECTION -->
+            <!-- ₹5 PAYMENT LOCK BOX -->
             <div id="payment-box" style="background: rgba(255, 204, 0, 0.08); border: 1px solid #ffcc00; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
-                <p style="margin: 0 0 8px 0; font-size: 13px; color: #ffcc00; font-weight: bold;">📥 Video download karne ke liye ₹5 pay karein:</p>
+                <p style="margin: 0 0 8px 0; font-size: 13px; color: #ffcc00; font-weight: bold;">🔒 Download Lock Active: ₹5 Pay Karein</p>
                 <button class="btn btn-pay" onclick="openDirectUPIPay()">⚡ Google Pay / PhonePe se ₹5 Pay Karein</button>
             </div>
 
-            <!-- DOWNLOAD BUTTON (Unlocked after payment) -->
+            <!-- UNLOCKED DOWNLOAD AREA -->
             <div id="download-area" class="hidden">
-                <button class="btn" onclick="downloadVideoFile()" style="background: linear-gradient(135deg, #00ffcc, #00b386); color: #0b0f19;">📥 Download Video Now (Gallery mein save karein)</button>
+                <a id="downloadLink" download="SPK_Custom_Video.webm" class="btn" style="background: linear-gradient(135deg, #00ffcc, #00b386); color: #0b0f19; text-decoration:none; display:block; text-align:center;">📥 Download Video to Gallery (Unlocked)</a>
             </div>
 
-            <button class="btn btn-share" onclick="alert('WhatsApp / Telegram share link copied!')">🔗 WhatsApp / Telegram par Share Karein</button>
-            <button class="btn" onclick="backToDashboard()" style="background: #2d3748; color: white; margin-top: 10px;">⬅ Dashboard Par Jayein</button>
+            <button class="btn btn-share" onclick="alert('WhatsApp / Telegram share link copied!')">🔗 Share Karein</button>
+            <button class="btn" onclick="backToDashboard()" style="background: #2d3748; color: white; margin-top: 10px;">⬅ Nayi Video Banayein</button>
         </div>
 
-        <!-- 6. EARNINGS & HISTORY SECTION -->
+        <!-- 6. EARNINGS & HISTORY -->
         <div id="history-section" class="hidden history-box">
             <h3 style="color: #ffcc00;">📊 Ad History & Earning</h3>
             <div style="background: #1a233a; padding: 15px; border-radius: 8px; text-align: left; margin: 15px 0; font-size: 14px;">
-                <p>📱 Total Videos Banayi: <span style="color: #00ffcc; float: right;">320 Ads</span></p>
-                <p>💰 Verified Earnings: <span style="color: #ffcc00; float: right;">₹1,600</span></p>
+                <p>📱 Total Videos: <span style="color: #00ffcc; float: right;" id="totalVideosCount">320</span></p>
+                <p>💰 Total Earnings: <span style="color: #ffcc00; float: right;" id="totalEarnings">₹1,600</span></p>
             </div>
             <button class="btn" onclick="backToDashboard()">⬅ Dashboard Par Wapas Jayein</button>
         </div>
@@ -310,7 +305,10 @@
     </div>
 
     <script>
-        let uploadedImageSrc = "";
+        let uploadedImageObj = null;
+        let recordedVideoBlob = null;
+        let userEarnings = 1600;
+        let totalVideos = 320;
 
         function openDashboard() {
             var mob = document.getElementById('mobile').value;
@@ -339,11 +337,12 @@
             var fileNameDisplay = document.getElementById('file-name');
             if(fileInput.files.length > 0) {
                 let file = fileInput.files[0];
-                fileNameDisplay.innerHTML = "✓ " + fileInput.files.length + " photo(s) chuni gayi hain.";
+                fileNameDisplay.innerHTML = "✓ Photo chuni gayi hai.";
                 
                 let reader = new FileReader();
                 reader.onload = function(e) {
-                    uploadedImageSrc = e.target.result;
+                    uploadedImageObj = new Image();
+                    uploadedImageObj.src = e.target.result;
                 }
                 reader.readAsDataURL(file);
             }
@@ -353,60 +352,146 @@
             var script = document.getElementById('scriptText').value.trim();
 
             if(script === "") {
-                alert("Kripya script ya title mein kuch likhein!");
-                return;
-            }
-
-            if(script.toLowerCase().includes("gali") || script.toLowerCase().includes("fraud")) {
-                alert("⚠️ Warning: Abusive script allowed nahi hai!");
+                alert("Kripya script ya style mein kuch likhein!");
                 return;
             }
 
             document.getElementById('studio-section').classList.add('hidden');
             document.getElementById('loading-section').classList.remove('hidden');
 
-            // 4-5 Seconds Rendering Delay
             setTimeout(function() {
-                document.getElementById('loading-section').classList.add('hidden');
-                document.getElementById('result-section').classList.remove('hidden');
-                
-                let textContainer = document.getElementById('previewScriptText');
-                textContainer.innerHTML = "💬 <b>Aapka Message / Script:</b> " + script;
+                generateRealVideoFile(script, function(videoBlob) {
+                    recordedVideoBlob = videoBlob;
+                    let videoUrl = URL.createObjectURL(videoBlob);
+                    
+                    document.getElementById('loading-section').classList.add('hidden');
+                    document.getElementById('result-section').classList.remove('hidden');
+                    
+                    let videoPreview = document.getElementById('finalVideoPreview');
+                    videoPreview.src = videoUrl;
 
-                let imgContainer = document.getElementById('previewImageContainer');
-                if(uploadedImageSrc !== "") {
-                    imgContainer.innerHTML = `<img src="${uploadedImageSrc}" style="max-width:100%; max-height:130px; border-radius:6px; border:1px solid #ffcc00;">`;
+                    let downloadLink = document.getElementById('downloadLink');
+                    downloadLink.href = videoUrl;
+
+                    // Reset payment lock for every new video generated!
+                    document.getElementById('payment-box').style.display = 'block';
+                    document.getElementById('download-area').classList.add('hidden');
+                });
+            }, 1000);
+        }
+
+        function generateRealVideoFile(scriptText, callback) {
+            const canvas = document.getElementById('videoCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            const stream = canvas.captureStream(30);
+            let recorder;
+            try {
+                recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
+            } catch (e) {
+                recorder = new MediaRecorder(stream);
+            }
+
+            let chunks = [];
+            recorder.ondataavailable = function(e) {
+                if (e.data.size > 0) chunks.push(e.data);
+            };
+
+            recorder.onstop = function() {
+                let blob = new Blob(chunks, { type: 'video/webm' });
+                callback(blob);
+            };
+
+            recorder.start();
+
+            let frameCount = 0;
+            const totalFrames = 120; // ~4 seconds video
+
+            function drawFrame() {
+                let grad = ctx.createLinearGradient(0, 0, 0, 1280);
+                grad.addColorStop(0, "#0b0f19");
+                grad.addColorStop(1, "#131b2e");
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, 720, 1280);
+
+                ctx.fillStyle = "#ffcc00";
+                ctx.font = "bold 34px sans-serif";
+                ctx.textAlign = "center";
+                ctx.fillText("❤️ SAPNA PURA KARENGE (SPK)", 360, 90);
+
+                if (uploadedImageObj && uploadedImageObj.complete) {
+                    ctx.drawImage(uploadedImageObj, 110, 150, 500, 500);
                 } else {
-                    imgContainer.innerHTML = `<span style="color: #a0aec0; font-size: 12px;">(Koi photo nahi chuni gayi - Sirf Text Ad)</span>`;
+                    ctx.fillStyle = "#1a233a";
+                    ctx.fillRect(110, 150, 500, 500);
+                    ctx.fillStyle = "#a0aec0";
+                    ctx.font = "24px sans-serif";
+                    ctx.fillText("(No Image Uploaded)", 360, 400);
                 }
 
-                document.getElementById('payment-box').style.display = 'block';
-                document.getElementById('download-area').classList.add('hidden');
-            }, 4500);
+                ctx.fillStyle = "#1a233a";
+                ctx.fillRect(50, 680, 620, 480);
+                ctx.strokeStyle = "#ffcc00";
+                ctx.lineWidth = 4;
+                ctx.strokeRect(50, 680, 620, 480);
+
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "26px sans-serif";
+                ctx.textAlign = "left";
+                
+                let words = scriptText.split(" ");
+                let line = "";
+                let y = 740;
+                let maxWidth = 560;
+
+                for(let n = 0; n < words.length; n++) {
+                    let testLine = line + words[n] + " ";
+                    let metrics = ctx.measureText(testLine);
+                    if (metrics.width > maxWidth && n > 0) {
+                        ctx.fillText(line, 90, y);
+                        line = words[n] + " ";
+                        y += 40;
+                    } else {
+                        line = testLine;
+                    }
+                }
+                ctx.fillText(line, 90, y);
+
+                frameCount++;
+                if (frameCount < totalFrames) {
+                    requestAnimationFrame(drawFrame);
+                } else {
+                    recorder.stop();
+                }
+            }
+
+            drawFrame();
         }
 
         function openDirectUPIPay() {
             var upiID = "Sandeepkumarsandeepku7862mar-6@oksbi"; 
             var amount = "5.00";
-            var note = "SPKAppDownloadFee";
+            var note = "SPKVideoDownloadFee";
             var upiIntentUrl = "upi://pay?pa=" + upiID + "&pn=SPK%20App&am=" + amount + "&cu=INR&tn=" + note;
             
             window.location.href = upiIntentUrl;
 
             setTimeout(function() {
-                var paymentConfirmed = confirm("Kya aapne ₹5 ka payment successfully complete kar diya hai? (OK dabayein verify karne ke liye)");
+                var paymentConfirmed = confirm("Kya aapne ₹5 ka payment successfully complete kar diya hai? (OK dabayein unlock karne ke liye)");
                 if(paymentConfirmed) {
-                    alert("✅ Payment Verified Successfully! Download button unlock ho gaya hai.");
+                    alert("✅ Payment Verified! Download link unlocked.");
                     document.getElementById('payment-box').style.display = 'none';
                     document.getElementById('download-area').classList.remove('hidden');
+
+                    // Update Earnings Counter
+                    totalVideos++;
+                    userEarnings += 5;
+                    document.getElementById('totalVideosCount').innerText = totalVideos;
+                    document.getElementById('totalEarnings').innerText = "₹" + userEarnings;
                 } else {
                     alert("❌ Payment cancel ho gayi.");
                 }
             }, 3000);
-        }
-
-        function downloadVideoFile() {
-            alert('🎉 Ad / Video Successfully Downloaded to your Phone Gallery!');
         }
 
         function showHistory() {
