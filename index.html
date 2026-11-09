@@ -227,9 +227,9 @@
         <div id="studio-section" class="hidden">
             <h3 style="color: #ffcc00; text-align: center; font-size: 16px; margin-bottom: 10px;">🎬 AI Video Studio</h3>
 
-            <label>Video Title & Script (Hero, Bonus & Game Details yahan likhein)</label>
+            <label>Video Title & Script (Apna promotion ya Hero / Game details likhein)</label>
             <div class="studio-box-wrapper">
-                <textarea id="scriptText" placeholder="Jaise: Salman Khan ki aawaz mein 500 ka bonus, Teen Patti app..."></textarea>
+                <textarea id="scriptText" placeholder="Jaise: Mahakal Battle game, sign up karo 199 bonus pao, ya Salman Khan style mein promote karo..."></textarea>
                 <!-- Plus Button inside text box -->
                 <button class="plus-btn" onclick="document.getElementById('fileInput').click()" title="Gallery se Photo Jodein">+</button>
                 <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="previewImage()">
@@ -248,8 +248,8 @@
         <!-- 3. LOADING SECTION -->
         <div id="loading-section" class="hidden loading-box">
             <div class="spinner"></div>
-            <h3 id="loading-text" style="color: #ffcc00;">Aapki Video aur Hero Voice Match Ho Rahi Hai...</h3>
-            <p style="color: #a0aec0; font-size: 13px;">Kripya intezaar karein, ad render ho rahi hai.</p>
+            <h3 id="loading-text" style="color: #ffcc00;">Aapki Video aur Script Render Ho Rahi Hai...</h3>
+            <p style="color: #a0aec0; font-size: 13px;">Kripya 4-5 second intezaار karein, ad taiyar ho rahi hai.</p>
         </div>
 
         <!-- 4. FINAL RESULT & PAYMENT SECTION -->
@@ -269,7 +269,7 @@
 
             <!-- DOWNLOAD BUTTON (Unlocked after payment) -->
             <div id="download-area" class="hidden">
-                <button class="btn" onclick="downloadVideoFile()" style="background: linear-gradient(135deg, #00ffcc, #00b386); color: #0b0f19;">📥 Download Video Now</button>
+                <button class="btn" onclick="downloadVideoFile()" style="background: linear-gradient(135deg, #00ffcc, #00b386); color: #0b0f19;">📥 Download Video Now (Gallery mein save karein)</button>
             </div>
 
             <button class="btn btn-share" onclick="alert('WhatsApp / Telegram share link copied!')">🔗 WhatsApp / Telegram par Share Karein</button>
@@ -326,12 +326,13 @@
             document.getElementById('studio-section').classList.add('hidden');
             document.getElementById('loading-section').classList.remove('hidden');
 
+            // 4-5 Seconds Rendering Delay
             setTimeout(function() {
                 document.getElementById('loading-section').classList.add('hidden');
                 document.getElementById('result-section').classList.remove('hidden');
                 document.getElementById('payment-box').style.display = 'block';
                 document.getElementById('download-area').classList.add('hidden');
-            }, 3000);
+            }, 4500);
         }
 
         function openDirectUPIPay() {
@@ -375,6 +376,5 @@
             document.getElementById('studio-section').classList.remove('hidden');
         }
     </script>
-
 </body>
 </html>
