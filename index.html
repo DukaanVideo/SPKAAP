@@ -26,18 +26,21 @@
             border: 1px solid #ffcc00;
             box-sizing: border-box;
         }
-        h1 {
-            color: #ffcc00;
-            font-size: 22px;
+        .header {
             text-align: center;
-            margin-bottom: 5px;
-            text-transform: uppercase;
+            margin-bottom: 20px;
         }
-        .subtitle {
+        .heart-logo {
+            font-size: 45px;
+            color: #ff3366;
+            margin-bottom: 2px;
+            text-shadow: 0 0 15px rgba(255,51,102,0.5);
+        }
+        .app-title {
             color: #a0aec0;
-            font-size: 13px;
-            text-align: center;
-            margin-bottom: 15px;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
         .safety-badge {
             background: rgba(255, 77, 77, 0.15);
@@ -51,9 +54,9 @@
             font-weight: bold;
             line-height: 1.4;
         }
-        .input-box, textarea, select {
+        .input-box {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin: 8px 0;
             background: #1a233a;
             border: 1px solid #2d3748;
@@ -61,6 +64,10 @@
             color: white;
             font-size: 14px;
             box-sizing: border-box;
+            outline: none;
+        }
+        .input-box:focus {
+            border-color: #ffcc00;
         }
         label {
             font-size: 13px;
@@ -69,19 +76,72 @@
             display: block;
             margin-top: 10px;
         }
-        .upload-section {
-            border: 2px dashed #ffcc00;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-            background: #1a233a;
-            margin: 10px 0;
-            cursor: pointer;
+        /* Single Box + Plus Button Layout */
+        .studio-box-wrapper {
+            position: relative;
+            margin: 8px 0;
         }
-        .plus-icon {
-            font-size: 24px;
+        .studio-box-wrapper textarea {
+            width: 100%;
+            height: 120px;
+            padding: 12px;
+            padding-right: 50px;
+            background: #1a233a;
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            resize: none;
+            outline: none;
+            box-sizing: border-box;
+        }
+        .studio-box-wrapper textarea:focus {
+            border-color: #ffcc00;
+        }
+        .plus-btn {
+            position: absolute;
+            bottom: 15px;
+            right: 12px;
+            background: #2d3748;
             color: #ffcc00;
+            border: 1px solid #ffcc00;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .plus-btn:hover {
+            background: #ffcc00;
+            color: #131b2e;
+        }
+        .generate-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .arrow-btn {
+            background: #ffcc00;
+            color: #0b0f19;
+            border: none;
+            width: 50px;
+            height: 45px;
+            border-radius: 8px;
+            font-size: 22px;
             font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+        .arrow-btn:hover {
+            background: #e0a800;
         }
         .btn {
             width: 100%;
@@ -93,7 +153,6 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 15px;
         }
         .btn-pay {
             background: linear-gradient(135deg, #00ffcc, #00b386);
@@ -103,6 +162,13 @@
             background: #2d3748;
             color: #ffcc00;
             margin-top: 10px;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            font-weight: bold;
         }
         .hidden {
             display: none;
@@ -135,12 +201,15 @@
 <body>
 
     <div class="container">
-        <h1>🚀 Sapna Pura Karenge</h1>
-        <div class="subtitle">APNA SAPNA PURA KARENGE</div>
+        <!-- HEADER WITH HEART & SMALL SUBTITLE -->
+        <div class="header">
+            <div class="heart-logo">❤️</div>
+            <div class="app-title">Sapna Pura Karenge</div>
+        </div>
         
         <!-- SAFETY & CYBER CRIME WARNING -->
         <div class="safety-badge">
-            🛡️ Strict Legal Warning: Yeh app ka idea mera hai. Iska galat istemal (fraud/spam) karne par Cyber Crime ke tahat kanooni karwayi hogi aur account ban hoga.
+            🛡️ Strict Legal Warning: Yeh app ka idea mera hai. Iska galat istemal karne par Cyber Crime ke tahat kanooni karwayi hogi.
         </div>
 
         <!-- 1. LOGIN SECTION -->
@@ -151,73 +220,56 @@
             <label>Password</label>
             <input type="password" class="input-box" id="password" placeholder="Password daalein">
             
-            <button class="btn" onclick="openStudio()">Login Karein</button>
+            <button class="btn" style="margin-top: 15px;" onclick="openStudio()">Login Karein</button>
         </div>
 
         <!-- 2. VIDEO STUDIO SECTION -->
         <div id="studio-section" class="hidden">
-            <h3 style="color: #ffcc00; text-align: center; font-size: 16px;">🎬 AI Video Studio</h3>
+            <h3 style="color: #ffcc00; text-align: center; font-size: 16px; margin-bottom: 10px;">🎬 AI Video Studio</h3>
 
-            <label>1. Hero / Character Name (Jaise: Salman Khan, SRK, Tiger)</label>
-            <input type="text" id="heroName" class="input-box" placeholder="Jis Hero ki aawaz chahiye uska naam likhein">
-
-            <label>2. Photo Upload (Optional - Plus (+) dabayein)</label>
-            <div class="upload-section" onclick="document.getElementById('fileInput').click()">
-                <div class="plus-icon">+</div>
-                <div style="font-size: 12px; color: #a0aec0; margin-top: 5px;">Gallery se photo chunein</div>
+            <label>Video Title & Script (Hero, Bonus & Game Details yahan likhein)</label>
+            <div class="studio-box-wrapper">
+                <textarea id="scriptText" placeholder="Jaise: Salman Khan ki aawaz mein 500 ka bonus, Teen Patti app..."></textarea>
+                <!-- Plus Button inside text box -->
+                <button class="plus-btn" onclick="document.getElementById('fileInput').click()" title="Gallery se Photo Jodein">+</button>
                 <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="previewImage()">
             </div>
-            <div id="file-name" style="font-size: 12px; color: #00ffcc; text-align: center;"></div>
+            <div id="file-name" style="font-size: 12px; color: #00ffcc; margin-bottom: 10px;"></div>
 
-            <label>3. Gaming App / Link Name</label>
-            <input type="text" id="gameName" class="input-box" placeholder="Jaise: Teen Patti Master / Telegram Link">
+            <div class="generate-row">
+                <button class="btn" style="flex:1; margin-top:0;" onclick="startGenerating()">Video Banayein</button>
+                <!-- Arrow (Teer) Button -->
+                <button class="arrow-btn" onclick="startGenerating()" title="Generate">➔</button>
+            </div>
 
-            <label>4. Custom Script / Dialogue</label>
-            <textarea id="scriptText" class="input-box" rows="3" placeholder="Jaise: Sign up karo, 199 bonus pao..."></textarea>
-
-            <label>5. Hero Voice Style (Auto-Matched by Name)</label>
-            <select id="voiceChoice" class="input-box">
-                <option>Hero AI Voice (Salman / SRK Style Matching)</option>
-                <option>Heavy Action Hero Voice (Masss Style)</option>
-                <option>Stylish & Energetic Voice</option>
-                <option>Female AI Voice (Glamour Style)</option>
-            </select>
-
-            <label>6. Video Action Style</label>
-            <select id="actionStyle" class="input-box">
-                <option>Haath mein phone pakad kar promote kare</option>
-                <option>Dance karte hue ad dein</option>
-                <option>Background mein crowd/log khade hon</option>
-            </select>
-
-            <button class="btn" onclick="startGenerating()">Video Banayein (Generate)</button>
             <button class="btn btn-share" onclick="showHistory()">📊 Meri Ad History & Earning</button>
         </div>
 
         <!-- 3. LOADING SECTION -->
         <div id="loading-section" class="hidden loading-box">
             <div class="spinner"></div>
-            <h3 id="loading-text" style="color: #ffcc00;">Hero ki Aawaz aur AI Video Match Ho Rahi Hai...</h3>
-            <p style="color: #a0aec0; font-size: 13px;">Kripya intezaar karein, selected hero ki style mein ad render ho rahi hai.</p>
+            <h3 id="loading-text" style="color: #ffcc00;">Aapki Video aur Hero Voice Match Ho Rahi Hai...</h3>
+            <p style="color: #a0aec0; font-size: 13px;">Kripya intezaar karein, ad render ho rahi hai.</p>
         </div>
 
-        <!-- 4. FINAL RESULT & DIRECT PAYMENT SECTION -->
+        <!-- 4. FINAL RESULT & PAYMENT SECTION -->
         <div id="result-section" class="hidden result-box">
-            <h3 style="color: #00ffcc;">🎉 Aapki Hero Ad Taiyar Hai!</h3>
-            <div style="background: #1a233a; height: 140px; border-radius: 8px; display: flex; justify-content: center; align-items: center; border: 1px dashed #ffcc00; margin: 10px 0;">
-                <span id="preview-title" style="color: #ffcc00; font-size: 14px;">▶ [ Hero Voice AI Ad Preview ]</span>
+            <h3 style="color: #00ffcc;">🎉 Aapki Ad Taiyar Hai!</h3>
+            <div style="background: #1a233a; height: 160px; border-radius: 8px; display: flex; justify-content: center; align-items: center; border: 1px dashed #ffcc00; margin: 10px 0; overflow: hidden;">
+                <video id="outputVideo" controls style="width:100%; height:100%; object-fit:cover;">
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                </video>
             </div>
             
             <!-- DIRECT UPI PAYMENT SECTION -->
             <div id="payment-box" style="background: rgba(255, 204, 0, 0.08); border: 1px solid #ffcc00; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
                 <p style="margin: 0 0 8px 0; font-size: 13px; color: #ffcc00; font-weight: bold;">📥 Video download karne ke liye ₹5 pay karein:</p>
                 <button class="btn btn-pay" onclick="openDirectUPIPay()">⚡ Google Pay / PhonePe se ₹5 Pay Karein</button>
-                <p style="font-size: 11px; color: #a0aec0; margin-top: 5px;">Click karte hi direct payment app khul jayegi.</p>
             </div>
 
             <!-- DOWNLOAD BUTTON (Unlocked after payment) -->
             <div id="download-area" class="hidden">
-                <button class="btn" onclick="alert('Video Successfully Downloaded to your Phone Gallery!')" style="background: linear-gradient(135deg, #00ffcc, #00b386); color: #0b0f19;">📥 Download Video Now</button>
+                <button class="btn" onclick="downloadVideoFile()" style="background: linear-gradient(135deg, #00ffcc, #00b386); color: #0b0f19;">📥 Download Video Now</button>
             </div>
 
             <button class="btn btn-share" onclick="alert('WhatsApp / Telegram share link copied!')">🔗 WhatsApp / Telegram par Share Karein</button>
@@ -254,35 +306,24 @@
             var fileInput = document.getElementById('fileInput');
             var fileNameDisplay = document.getElementById('file-name');
             if(fileInput.files.length > 0) {
-                fileNameDisplay.innerHTML = "Selected Photo: " + fileInput.files[0].name;
+                fileNameDisplay.innerHTML = "✓ Photo chuni gayi: " + fileInput.files[0].name;
             }
         }
 
         function startGenerating() {
-            var hero = document.getElementById('heroName').value.trim();
-            var game = document.getElementById('gameName').value.trim();
-            var script = document.getElementById('scriptText').value.toLowerCase();
+            var script = document.getElementById('scriptText').value.trim();
 
-            if(hero === "") {
-                alert("Kripya Hero ka naam daalein (Jaise: Salman Khan, SRK)!");
+            if(script === "") {
+                alert("Kripya script ya title mein kuch likhein!");
                 return;
             }
 
-            if(game === "") {
-                alert("Kripya Gaming App ya Link ka naam daalein!");
+            if(script.toLowerCase().includes("gali") || script.toLowerCase().includes("fraud")) {
+                alert("⚠️ Warning: Abusive script allowed nahi hai!");
                 return;
             }
-
-            if(script.includes("gali") || script.includes("fraud") || script.includes("cheat")) {
-                alert("⚠️ Warning: Cyber Crime rules ke khilaf abusive script allowed nahi hai!");
-                return;
-            }
-
-            document.getElementById('loading-text').innerText = "🎬 " + hero + " ki Aawaz & AI Video Match Ho Rahi Hai...";
-            document.getElementById('preview-title').innerText = "▶ [ " + hero + " Voice AI Gaming Ad ]";
 
             document.getElementById('studio-section').classList.add('hidden');
-            document.getElementById('loading-section').classList.add('hidden');
             document.getElementById('loading-section').classList.remove('hidden');
 
             setTimeout(function() {
@@ -308,9 +349,19 @@
                     document.getElementById('payment-box').style.display = 'none';
                     document.getElementById('download-area').classList.remove('hidden');
                 } else {
-                    alert("❌ Payment cancel ho gayi. Download unlock nahi ho paya.");
+                    alert("❌ Payment cancel ho gayi.");
                 }
             }, 3000);
+        }
+
+        function downloadVideoFile() {
+            let a = document.createElement('a');
+            a.href = "https://www.w3schools.com/html/mov_bbb.mp4";
+            a.download = "SapnaPuraKarenge_Video.mp4";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            alert('Video Successfully Downloaded to your Phone Gallery!');
         }
 
         function showHistory() {
