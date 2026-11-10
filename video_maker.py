@@ -1,49 +1,98 @@
 import os
 import subprocess
-from flask import Flask, request, jsonify, send_from_directory, render_template
+from flask import Flask, request, jsonify, send_from_directory, render_template_string
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__)
 
 UPLOAD_FOLDER = 'uploads'
 OUTPUT_FOLDER = 'outputs'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
-# 1. Yeh route home page (index.html) dikhane ke liye zaroori hai
+# Seedha yahan HTML UI de diya hai taaki folder ki koi galti na ho
+HTML_PAGE = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DukaanVideo - Promo Maker</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f9; padding: 20px; text-align: center; }
+        .container { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); }
+        input, textarea { width: 100%; margin: 10px 0; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        button { background: #28a745; color: white; border: none; padding: 12px; width: 100%; border-radius: 5px; font-size: 16px; cursor: pointer; }
+        button:hover { background: #218838; }
+        #result { margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>DukaanVideo Promo Maker</h2>
+        <form id="promoForm">
+            <label>Dukaan ki Photo:</label>
+            <input type="file" id="image" name="image" accept="image/*" required>
+            
+            <label>Video Script / Text:</label>
+            <textarea id="script" name="script" placeholder="Jaise: Hamari dukaan par sabhi saman uplabdh hai!" rows="3" required></textarea>
+            
+            <label>UPI Transaction ID (Payment Verification):</label>
+            <input type="text" id="txn_id" name="txn_id" placeholder="Transaction ID dalein" required>
+            
+            <button type="submit">Video Generate Karein</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('promoForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            document.getElementById('result').innerHTML = "<p>Video ban rahi hai, kripya intezaar karein...</p>";
+            
+            const response = await fetch('/verify-and-generate', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await response.json();
+            
+            if(data.status === 'Success') {
+                document.getElementById('result').innerHTML = `<p style="color:green;">${data.message}</p><a href="${data.video_url}" download><button style="background:#007bff;">Video Download Karein</button></a>`;
+            } else {
+                document.getElementById('result').innerHTML = `<p style="color:red;">${data.error || 'Kuch gadbad ho gayi!'}</p>`;
+            }
+        };
+    </script>
+</body>
+</html>
+"""
+
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template_string(HTML_PAGE)
 
 @app.route('/verify-and-generate', methods=['POST'])
 def verify_and_generate():
-    """
-    Yeh API pehle check karegi ki user ne payment kiya hai ya nahi,
-    aur payment confirm hone par hi video render karke download link degi.
-    """
     try:
-        # 1. App se aane wala data aur payment status/transaction ID check karna
         shop_text = request.form.get('script', 'Hamari dukaan par swagat hai!')
-        transaction_id = request.form.get('txn_id')  # User ya UPI app se mila reference number
+        transaction_id = request.form.get('txn_id')
         image_file = request.files.get('image')
         
         if not image_file:
             return jsonify({'error': 'Dukaan ki photo zaroori hai!'}), 400
 
-        # 2. Security / Fake Payment Check
         if not transaction_id or transaction_id == "FAKE_TXN":
             return jsonify({
                 'status': 'Failed',
                 'error': 'Payment verify nahi ho saki! Kripya asli payment karein.'
             }), 400
 
-        # Agar payment asli hai, tabhi aage badho:
         image_path = os.path.join(UPLOAD_FOLDER, image_file.filename)
         image_file.save(image_path)
         
         output_filename = 'dukaan_promo.mp4'
         output_video_path = os.path.join(OUTPUT_FOLDER, output_filename)
 
-        # 3. FFmpeg se Video Render karna (Text & Image ke sath)
         ffmpeg_cmd = [
             'ffmpeg', '-y',
             '-loop', '1',
@@ -65,7 +114,6 @@ def verify_and_generate():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# 4. Video Download karne ke liye route
 @app.route('/download/<path:filename>')
 def download_file(filename):
     return send_from_directory(OUTPUT_FOLDER, filename, as_attachment=True)
