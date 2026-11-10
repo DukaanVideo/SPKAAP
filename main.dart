@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 // --- POINT NO. 1: App Start Point (Bina login/password ke direct khulne wala system) ---
 void main() {
-  runApp(const ApnaSapnaApp());
+  runApp(const DukaanVideoApp());
 }
 
-class ApnaSapnaApp extends StatelessWidget {
-  const ApnaSapnaApp({Key? key}) : super(key: key);
+class DukaanVideoApp extends StatelessWidget {
+  const DukaanVideoApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Promotional Video App',
+      title: 'DukaanVideo App',
       theme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.purple,
@@ -36,14 +36,14 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // --- POINT NO. 2: Slogan Line ("Apna Sapna Pura Karein") ---
+              // --- POINT NO. 2: Exact Name Banner ---
               const Text(
-                "Apna Sapna Pura Karein",
+                "DukaanVideo",
                 style: TextStyle(
                   color: Colors.amberAccent,
-                  fontSize: 26,
+                  fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  letterSpacing: 1.2,
+                  letterSpacing: 1.5,
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -58,11 +58,11 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 50),
 
-              // --- POINT NO. 3 (Agle step ki taiyari): Plus (+) Button Layout ---
+              // --- POINT NO. 3: Plus (+) Button Layout ---
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    // Yahan click hone par Gallery / Camera ka menu khulega (Agla step)
+                    // Yahan click hone par Gallery / Camera ka menu khulega
                   },
                   child: Container(
                     height: 90,
