@@ -25,6 +25,73 @@ class DukaanVideoApp extends StatelessWidget {
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
+  // --- (+) Button dabane par niche se khulne wala Media Menu (Gallery, Camera, Text) ---
+  void _showMediaOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.grey[900],
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "Apni Dukan ki Media Chunein",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.amberAccent,
+                ),
+              ),
+              const SizedBox(height: 20),
+              
+              // 1. Gallery Option
+              ListTile(
+                leading: const Icon(Icons.photo_library, color: Colors.purpleAccent, size: 30),
+                title: const Text('Gallery se Photo/Video Uthayein'),
+                onTap: () {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Gallery option selected!')),
+                  );
+                },
+              ),
+              
+              // 2. Camera Option
+              ListTile(
+                leading: const Icon(Icons.camera_alt, color: Colors.deepOrangeAccent, size: 30),
+                title: const Text('Camera se Live Photo Khichein'),
+                onTap: () {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Camera option selected!')),
+                  );
+                },
+              ),
+
+              // 3. Text / Script Box Option
+              ListTile(
+                leading: const Icon(Icons.edit_note, color: Colors.greenAccent, size: 30),
+                title: const Text('Dukaan ki Details / Script Likhein'),
+                onTap: () {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Text Script option selected!')),
+                  );
+                },
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +103,7 @@ class HomeScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // --- POINT NO. 2: Exact Name Banner ---
+              // --- POINT NO. 2: Exact Name Banner ("DukaanVideo") ---
               const Text(
                 "DukaanVideo",
                 style: TextStyle(
@@ -62,7 +129,8 @@ class HomeScreen extends StatelessWidget {
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    // Yahan click hone par Gallery / Camera ka menu khulega
+                    // (+) button click hone par menu open hoga
+                    _showMediaOptions(context);
                   },
                   child: Container(
                     height: 90,
