@@ -1,0 +1,25 @@
+name: SPKAAP
+description: "DukaanVideo - Promotional video creation app for small businesses."
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # UPI payment link aur external browser/apps kholne ke liye zaroori package
+  url_launcher: ^6.1.10
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  
+  # Agar app mein koi local images ya assets lagane hon toh yahan aate hain
+  # assets:
+  #   - assets/images/
