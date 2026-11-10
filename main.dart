@@ -23,7 +23,7 @@ class DukaanVideoApp extends StatelessWidget {
 }
 
 // ==========================================
-// 1️⃣ HOME SCREEN (Banner & (+) Button)
+// 1️⃣ HOME SCREEN (Banner, History Icon & (+) Button)
 // ==========================================
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -88,6 +88,22 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.history, color: Colors.amberAccent, size: 28),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const HistoryScreen()),
+              );
+            },
+          ),
+          const SizedBox(width: 10),
+        ],
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -271,9 +287,8 @@ class ScriptScreen extends StatefulWidget {
 class _ScriptScreenState extends State<ScriptScreen> {
   final TextEditingController scriptController = TextEditingController();
   String selectedVoice = 'Ladki ki Aawaz (Female AI)';
-  bool isPaid = false; // Payment status
+  bool isPaid = false;
 
-  // Aapki UPI ID par ₹5 ka payment bhejne ka direct intent link
   Future<void> _openUpiPayment() async {
     final String upiUrlString = 'upi://pay?pa=Sandeepkumarsandeepku7862mar-6@oksbi&pn=DukaanVideo&am=5.00&cu=INR&tn=Dukaan%20Video%20Download%20Fee';
     final Uri upiUri = Uri.parse(upiUrlString);
@@ -400,14 +415,63 @@ class _ScriptScreenState extends State<ScriptScreen> {
     );
   }
 }
-// Home Screen ke andar upar yeh icon button jodh dein:
-IconButton(
-  icon: const Icon(Icons.history, color: Colors.amberAccent, size: 28),
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const HistoryScreen()),
-    );
-  },
-),
 
+// ==========================================
+// 5️⃣ SAVED VIDEOS / HISTORY SCREEN
+// ==========================================
+class HistoryScreen extends StatelessWidget {
+  const HistoryScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final List> savedVideos = [
+      {'title': 'Doodh Dairy Promo', 'date': '26 Oct 2026', 'status': 'Downloaded (₹5 Paid)'},
+      {'title': 'Mobile Store Offer', 'date': '25 Oct 2026', 'status': 'Downloaded (₹5 Paid)'},
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Meri Banayi Huyi Videos'),
+        backgroundColor: Colors.purple[900],
+      ),
+      body: savedVideos.isEmpty
+          ? const Center(
+              child: Text(
+                'Abhi tak koi video nahi banayi hai!',
+                style: TextStyle(color: Colors.grey, fontSize: 16),
+              ),
+            )
+          : ListView.builder(
+              padding: const EdgeInsets.all(20.0),
+              itemCount: savedVideos.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  color: Colors.grey[900],
+                  margin: const EdgeInsets.only(bottom: 15),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  child: ListTile(
+                    leading: const Icon(Icons.video_library, color: Colors.amberAccent, size: 35),
+                    title: Text(
+                      savedVideos[index]['title']!,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    subtitle: Text(
+                      "Tarikh: ${savedVideos[index]['date']}\nStatus: ${savedVideos[index]['status']}",
+                      style: const TextStyle(color: Colors.white70, fontSize: 13),
+                    ),
+                    isThreeLine: true,
+                    trailing: IconButton(
+                      icon: const Icon(Icons.play_circle_fill, color: Colors.green, size: 30),
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('${savedVideos[index]['title']} play ho rahi hai!')),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              },
+            ),
+    );
+  }
+}
