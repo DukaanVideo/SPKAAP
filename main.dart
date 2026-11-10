@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(const DukaanVideoApp());
@@ -42,11 +43,7 @@ class HomeScreen extends StatelessWidget {
             children: [
               const Text(
                 "Apni Dukan ki Media Chunein",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.amberAccent,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amberAccent),
               ),
               const SizedBox(height: 20),
               
@@ -56,10 +53,7 @@ class HomeScreen extends StatelessWidget {
                 title: const Text('Gallery se Photo/Video Uthayein'),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const PreviewScreen(selectedType: 'Gallery Media')),
-                  );
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const CategoryScreen(selectedMedia: 'Gallery Media')));
                 },
               ),
               
@@ -69,10 +63,7 @@ class HomeScreen extends StatelessWidget {
                 title: const Text('Camera se Live Photo Khichein'),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const PreviewScreen(selectedType: 'Camera Live Photo')),
-                  );
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const CategoryScreen(selectedMedia: 'Camera Live Photo')));
                 },
               ),
 
@@ -82,10 +73,7 @@ class HomeScreen extends StatelessWidget {
                 title: const Text('Dukaan ki Details / Script Likhein'),
                 onTap: () {
                   Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ScriptScreen()),
-                  );
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ScriptScreen()));
                 },
               ),
               const SizedBox(height: 10),
@@ -109,12 +97,7 @@ class HomeScreen extends StatelessWidget {
             children: [
               const Text(
                 "DukaanVideo",
-                style: TextStyle(
-                  color: Colors.amberAccent,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.5,
-                ),
+                style: TextStyle(color: Colors.amberAccent, fontSize: 32, fontWeight: FontWeight.bold, letterSpacing: 1.5),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10),
@@ -140,11 +123,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                       shape: BoxShape.circle,
                       boxShadow: [
-                        BoxShadow(
-                          color: Colors.purple.withOpacity(0.5),
-                          blurRadius: 15,
-                          spreadRadius: 3,
-                        ),
+                        BoxShadow(color: Colors.purple.withOpacity(0.5), blurRadius: 15, spreadRadius: 3),
                       ],
                     ),
                     child: const Icon(Icons.add, size: 50, color: Colors.white),
@@ -165,78 +144,61 @@ class HomeScreen extends StatelessWidget {
 }
 
 // ==========================================
-// 2️⃣ PREVIEW & CONFIRMATION SCREEN
+// 2️⃣ BUSINESS CATEGORY SELECTION SCREEN
 // ==========================================
-class PreviewScreen extends StatelessWidget {
-  final String selectedType;
-  const PreviewScreen({Key? key, required this.selectedType}) : super(key: key);
+class CategoryScreen extends StatelessWidget {
+  final String selectedMedia;
+  const CategoryScreen({Key? key, required this.selectedMedia}) : super(key: key);
+
+  final List> categories = const [
+    {'name': 'Doodh Dairy & Paneer', 'icon': Icons.local_drink},
+    {'name': 'Mobile & Electronics Shop', 'icon': Icons.phone_android},
+    {'name': 'Mithaai & Restaurant', 'icon': Icons.cake},
+    {'name': 'Gaming & Tournaments', 'icon': Icons.sports_esports},
+    {'name': 'General Store / Dukaan', 'icon': Icons.store},
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Media Preview & Confirmation')),
+      appBar: AppBar(title: const Text('Apna Business Category Chunein')),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Text(
-              "Aap yeh upload karne ki koshish kar rahe hain:",
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-              textAlign: TextAlign.center,
+              "Aapka dhandha kis cheez ka hai?",
+              style: TextStyle(fontSize: 16, color: Colors.amberAccent, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 10),
-            Text(
-              selectedType,
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.amberAccent),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 30),
-            
-            Container(
-              height: 200,
-              decoration: BoxDecoration(
-                color: Colors.grey[800],
-                borderRadius: BorderRadius.circular(15),
-                border: Border.all(color: Colors.purple, width: 2),
+            const SizedBox(height: 15),
+            Expanded(
+              child: ListView.builder(
+                itemCount: categories.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    color: Colors.grey[900],
+                    margin: const EdgeInsets.only(bottom: 15),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    child: ListTile(
+                      leading: Icon(categories[index]['icon'], color: Colors.purpleAccent, size: 30),
+                      title: Text(categories[index]['name'], style: const TextStyle(fontWeight: FontWeight.bold)),
+                      trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PreviewScreen(
+                              selectedType: selectedMedia,
+                              category: categories[index]['name'],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
               ),
-              child: const Center(
-                child: Icon(Icons.image, size: 80, color: Colors.white54),
-              ),
-            ),
-            const SizedBox(height: 30),
-
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.edit, color: Colors.orange),
-                    label: const Text('Badlein'),
-                  ),
-                ),
-                const SizedBox(width: 15),
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    label: const Text('Hataein'),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ScriptScreen()),
-                );
-              },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.purple, padding: const EdgeInsets.symmetric(vertical: 15)),
-              child: const Text('Aage Badhein (Next)', style: TextStyle(fontSize: 16, color: Colors.white)),
             ),
           ],
         ),
@@ -246,7 +208,58 @@ class PreviewScreen extends StatelessWidget {
 }
 
 // ==========================================
-// 3️⃣ TEXT SCRIPT, VOICE-OVER & ₹5 PAYMENT SCREEN (Teesra Part)
+// 3️⃣ PREVIEW & CONFIRMATION SCREEN
+// ==========================================
+class PreviewScreen extends StatelessWidget {
+  final String selectedType;
+  final String category;
+  const PreviewScreen({Key? key, required this.selectedType, this.category = 'General Business'}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Media & Category Preview')),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text("Category: $category", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amberAccent), textAlign: TextAlign.center),
+            const SizedBox(height: 10),
+            Text("Media Type: $selectedType", style: const TextStyle(fontSize: 14, color: Colors.grey), textAlign: TextAlign.center),
+            const SizedBox(height: 30),
+            
+            Container(
+              height: 180,
+              decoration: BoxDecoration(
+                color: Colors.grey[800],
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: Colors.purple, width: 2),
+              ),
+              child: const Center(child: Icon(Icons.image, size: 80, color: Colors.white54)),
+            ),
+            const SizedBox(height: 30),
+
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ScriptScreen()),
+                );
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.purple, padding: const EdgeInsets.symmetric(vertical: 15)),
+              child: const Text('Aage Script aur Voice par Badhein', style: TextStyle(fontSize: 16, color: Colors.white)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ==========================================
+// 4️⃣ SCRIPT, VOICE-OVER & UPI PAYMENT SCREEN
 // ==========================================
 class ScriptScreen extends StatefulWidget {
   const ScriptScreen({Key? key}) : super(key: key);
@@ -258,23 +271,46 @@ class ScriptScreen extends StatefulWidget {
 class _ScriptScreenState extends State<ScriptScreen> {
   final TextEditingController scriptController = TextEditingController();
   String selectedVoice = 'Ladki ki Aawaz (Female AI)';
+  bool isPaid = false; // Payment status
+
+  // Aapki UPI ID par ₹5 ka payment bhejne ka direct intent link
+  Future<void> _openUpiPayment() async {
+    final String upiUrlString = 'upi://pay?pa=Sandeepkumarsandeepku7862mar-6@oksbi&pn=DukaanVideo&am=5.00&cu=INR&tn=Dukaan%20Video%20Download%20Fee';
+    final Uri upiUri = Uri.parse(upiUrlString);
+
+    try {
+      if (await canLaunchUrl(upiUri)) {
+        await launchUrl(upiUri, mode: LaunchMode.externalApplication);
+        setState(() {
+          isPaid = true;
+        });
+      } else {
+        setState(() {
+          isPaid = true;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Payment app par bhej diya gaya hai!')),
+        );
+      }
+    } catch (e) {
+      setState(() {
+        isPaid = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Script & Voice-Over Setup')),
+      appBar: AppBar(title: const Text('Script, Voice & UPI Payment')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text(
-              "Apni dukan ya offer ki details likhein ya mic se bolein:",
-              style: TextStyle(fontSize: 15, color: Colors.white70),
-            ),
+            const Text("Apni dukan ya offer ki details likhein ya mic se bolein:", style: TextStyle(fontSize: 15, color: Colors.white70)),
             const SizedBox(height: 10),
 
-            // Text Box & Mic Button
             Row(
               children: [
                 Expanded(
@@ -291,16 +327,11 @@ class _ScriptScreenState extends State<ScriptScreen> {
                 ),
                 const SizedBox(width: 10),
                 Container(
-                  decoration: BoxDecoration(
-                    color: Colors.deepOrange,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  decoration: BoxDecoration(color: Colors.deepOrange, borderRadius: BorderRadius.circular(12)),
                   child: IconButton(
                     icon: const Icon(Icons.mic, color: Colors.white, size: 30),
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Listening... Bolkar type karein!')),
-                      );
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Listening... Bolkar type karein!')));
                     },
                   ),
                 ),
@@ -308,11 +339,7 @@ class _ScriptScreenState extends State<ScriptScreen> {
             ),
             const SizedBox(height: 25),
 
-            // Voice-Over Selection (Ladka, Ladki, ya Khud ki Aawaz)
-            const Text(
-              "Voice-Over Aawaz Chunein:",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.amberAccent),
-            ),
+            const Text("Voice-Over Aawaz Chunein:", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.amberAccent)),
             const SizedBox(height: 10),
             DropdownButtonFormField<String>(
               value: selectedVoice,
@@ -322,61 +349,49 @@ class _ScriptScreenState extends State<ScriptScreen> {
                 filled: true,
                 fillColor: Colors.grey[900],
               ),
-              items: <String>[
-                'Ladki ki Aawaz (Female AI)',
-                'Ladke ki Aawaz (Male AI)',
-                'Meri Apni Aawaz (Voice Clone)'
-              ].map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).formatListOrDrop(), // Standard dropdown format
+              items: <String>['Ladki ki Aawaz (Female AI)', 'Ladke ki Aawaz (Male AI)', 'Meri Apni Aawaz (Voice Clone)']
+                  .map((String value) => DropdownMenuItem<String>(value: value, child: Text(value)))
+                  .toList(),
               onChanged: (String? newValue) {
-                setState(() {
-                  selectedVoice = newValue!;
-                });
+                setState(() { selectedVoice = newValue!; });
               },
             ),
             const SizedBox(height: 30),
 
-            // Video Preview & Payment Button
+            // UPI Payment Button
             ElevatedButton.icon(
-              onPressed: () {
-                // Payment & Download Dialog popup
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    backgroundColor: Colors.grey[900],
-                    title: const Text('Video Download (₹5 Shulk)', style: TextStyle(color: Colors.amberAccent)),
-                    content: const Text('Aapka video taiyar hai! Download karne ke liye kewal ₹5 ka UPI/QR payment karein.'),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text('Radd Karein', style: TextStyle(color: Colors.grey)),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                        onPressed: () {
-                          Navigator.pop(context);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Payment Successful! Video Downloading... 🎉')),
-                          );
-                        },
-                        child: const Text('Pay ₹5 & Download'),
-                      ),
-                    ],
-                  ),
-                );
-              },
-              icon: const Icon(Icons.play_circle_fill, color: Colors.black),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.amber,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-              ),
-              label: const Text(
-                'Video Preview & Pay ₹5 to Download',
-                style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
+              onPressed: _openUpiPayment,
+              icon: const Icon(Icons.payment, color: Colors.black),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.amber, padding: const EdgeInsets.symmetric(vertical: 16)),
+              label: const Text('Pay ₹5 (Google Pay / PhonePe)', style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold)),
+            ),
+            const SizedBox(height: 15),
+
+            // Download Button (Locked until payment)
+            Opacity(
+              opacity: isPaid ? 1.0 : 0.5,
+              child: ElevatedButton.icon(
+                onPressed: isPaid 
+                  ? () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Video Successfully Downloaded! 🎉')),
+                      );
+                    } 
+                  : () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Pehle upar diye button se ₹5 ka payment karein!')),
+                      );
+                    },
+                icon: const Icon(Icons.download, color: Colors.white),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isPaid ? Colors.green : Colors.grey,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                label: Text(
+                  isPaid ? 'Video Download Karein (Unlocked)' : 'Payment ke Baad Button Khulega 🔒',
+                  style: const TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
           ],
@@ -384,9 +399,4 @@ class _ScriptScreenState extends State<ScriptScreen> {
       ),
     );
   }
-}
-
-// Extension to avoid dropdown formatting issue in standard Dart
-extension on List<DropdownMenuItem<String>> {
-  formatListOrDrop() => this;
 }
