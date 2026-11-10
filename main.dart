@@ -400,3 +400,14 @@ class _ScriptScreenState extends State<ScriptScreen> {
     );
   }
 }
+// Home Screen ke andar upar yeh icon button jodh dein:
+IconButton(
+  icon: const Icon(Icons.history, color: Colors.amberAccent, size: 28),
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const HistoryScreen()),
+    );
+  },
+),
+
