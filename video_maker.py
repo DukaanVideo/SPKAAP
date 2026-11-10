@@ -1,13 +1,18 @@
 import os
 import subprocess
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, render_template
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 
 UPLOAD_FOLDER = 'uploads'
 OUTPUT_FOLDER = 'outputs'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
+
+# 1. Yeh route home page (index.html) dikhane ke liye zaroori hai
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 @app.route('/verify-and-generate', methods=['POST'])
 def verify_and_generate():
@@ -60,7 +65,7 @@ def verify_and_generate():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# 4. NEW: Video Download karne ke liye route (Error 404 se bachne ke liye)
+# 4. Video Download karne ke liye route
 @app.route('/download/<path:filename>')
 def download_file(filename):
     return send_from_directory(OUTPUT_FOLDER, filename, as_attachment=True)
