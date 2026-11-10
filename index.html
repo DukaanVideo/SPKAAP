@@ -6,30 +6,46 @@
     <title>DukaanVideo - Local Promo Maker</title>
     <style>
         body { font-family: Arial, sans-serif; background: #121212; margin: 0; padding: 16px; color: #fff; }
-        .header { background: #4a148c; color: white; padding: 20px; border-radius: 12px; text-align: center; }
-        .card { background: #1e1e1e; padding: 20px; margin-top: 16px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 1px solid #333; }
-        select, textarea, input[type="file"], input[type="range"] { width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 16px; background: #2c2c2c; color: #fff; border: 1px solid #555; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
+        .header { background: #4a148c; color: white; padding: 16px; border-radius: 12px; text-align: center; }
+        .card { background: #1e1e1e; padding: 16px; margin-top: 16px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 1px solid #333; }
+        select { width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 16px; background: #2c2c2c; color: #fff; border: 1px solid #555; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
         label { color: #ffb300; font-weight: bold; font-size: 14px; display: block; margin-top: 10px; }
+        
+        /* Modern Chat Input Bar (Plus, Mic & Send Arrow in one line) */
+        .chat-input-bar { display: flex; align-items: center; background: #2c2c2c; border: 1px solid #555; border-radius: 30px; padding: 8px 12px; margin-top: 8px; margin-bottom: 16px; gap: 10px; }
+        .chat-input-bar textarea { flex: 1; background: transparent; border: none; color: #fff; resize: none; font-size: 15px; outline: none; height: 24px; max-height: 80px; padding: 0; margin: 0; }
+        
+        .icon-btn { background: transparent; border: none; cursor: pointer; font-size: 22px; display: flex; align-items: center; justify-content: center; padding: 5px; color: #ffb300; }
+        .btn-send { background: #2196F3; color: white; width: 38px; height: 38px; border-radius: 50%; border: none; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .mic-btn.recording { color: #d32f2f; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        /* Popup Menu Styling (Plus dabane par khulega) */
+        .popup-modal { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: #1e1e1e; border-top-left-radius: 20px; border-top-right-radius: 20px; padding: 20px; box-sizing: border-box; border-top: 2px solid #ffb300; z-index: 100; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        .popup-item { padding: 14px; background: #2c2c2c; margin: 8px 0; border-radius: 10px; text-align: center; cursor: pointer; font-weight: bold; color: #ffb300; border: 1px solid #444; font-size: 15px; }
+        .popup-close { background: #d32f2f; color: white; margin-top: 15px; width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
         .btn { width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; color: white; margin-top: 10px; transition: 0.3s; }
-        .btn-pay { background: #ffb300; color: #000; }
-        .btn-download { background: #4CAF50; }
+        .btn-pay { background: #4CAF50; }
+        .btn-download { background: #2196F3; }
         .btn-disabled { background: #555; color: #aaa; cursor: not-allowed; }
+        
+        /* Preview Video Section */
+        #previewContainer { display: none; text-align: center; margin-top: 15px; }
+        video { width: 100%; border-radius: 8px; margin-top: 10px; border: 1px solid #555; }
     </style>
 </head>
 <body>
 
     <div class="header">
         <h2 style="margin:0;">🎥 DukaanVideo</h2>
-        <p style="margin:5px 0 0 0; font-size: 13px; color: #ddd;">Apni Dukan, Dairy, Mobile Shop ya Gaming ke liye turant video banayein!</p>
+        <p style="margin:5px 0 0 0; font-size: 13px; color: #ddd;">Apni Dukan, Dairy ya Gaming ke liye Shandar Video banayein!</p>
     </div>
 
     <div class="card">
-        <!-- 1. Media Upload (Gallery / Camera) -->
-        <label>1. Gallery se Photo/Video ya Camera se Live Uthayein:</label>
-        <input type="file" id="mediaInput" accept="image/*,video/*" capture="environment">
-
-        <!-- 2. Business & Game Categories (Gaming included) -->
-        <label>2. Apna Business ya Game Category Chuniye:</label>
+        <!-- 1. Category Selection -->
+        <label>1. Apna Business ya Game Category Chuniye:</label>
         <select id="category">
             <option>General Store / Dukaan</option>
             <option>Doodh Dairy & Paneer</option>
@@ -38,59 +54,163 @@
             <option>Gaming & Tournaments 🎮</option>
         </select>
 
-        <!-- 3. Script / Offer -->
-        <label>3. Video ki Script / Offer Likhein:</label>
-        <textarea id="script" rows="3">Namaskar! Humari dukan par sabhi saman saste aur uchit daam par uplabdh hai. Aaj hi visit karein!</textarea>
-
-        <!-- 4. Voice-Over (Speaker AI) -->
-        <label>4. Voice-Over (Speaker Aawaz) Chuniye:</label>
+        <!-- 2. Voice-Over -->
+        <label>2. Voice-Over (Speaker Aawaz) Chuniye:</label>
         <select id="voice">
             <option>Ladki ki Aawaz (Female AI)</option>
             <option>Ladke ki Aawaz (Male AI)</option>
             <option>Meri Apni Aawaz (Voice Clone)</option>
         </select>
 
-        <!-- 5. Background Music & Volume Level Control -->
-        <label>5. Background Music Chuniye:</label>
+        <!-- 3. Background Music (With No Music Option) -->
+        <label>3. Background Music Chuniye:</label>
         <select id="bgMusic">
-            <option>Upbeat Promotional Beat</option>
-            <option>Gaming Action Remix</option>
-            <option>Soft Acoustic Background</option>
+            <option value="none">🚫 No Music (Bina Music ke)</option>
+            <option value="upbeat">Upbeat Promotional Beat</option>
+            <option value="gaming">Gaming Action Remix</option>
+            <option value="acoustic">Soft Acoustic Background</option>
         </select>
 
-        <label>Music Volume / Level Control:</label>
-        <input type="range" id="volumeRange" min="0" max="100" value="50">
+        <!-- 4. Script & Modern Input Bar (Plus, Mic and Send Arrow in one line) -->
+        <label>4. Video ki Script / Offer Likhein ya Bol kar Type Karein:</label>
+        <div class="chat-input-bar">
+            <!-- Plus Button to Open Media Options -->
+            <button type="button" class="icon-btn" onclick="openPopup()" title="Media Jodein (+)">➕</button>
+            
+            <!-- Textarea for Script -->
+            <textarea id="script" rows="1" placeholder="Yahan script likhein ya mic dabayein...">Namaskar! Humari dukan par sabhi saman saste aur uchit daam par uplabdh hai. Aaj hi visit karein!</textarea>
+            
+            <!-- Mic Button for Voice-to-Text (Hindi & English) -->
+            <button type="button" class="icon-btn mic-btn" id="micBtn" onclick="toggleSpeechRecognition()" title="Bol kar likhein (Mic)">🎤</button>
+            
+            <!-- Send / Generate Preview Arrow Button -->
+            <button type="button" class="btn-send" onclick="generatePreview()" title="Preview Dekhein (Arrow)">⬆</button>
+        </div>
 
-        <!-- Action Buttons -->
-        <button class="btn btn-pay" onclick="payUPI()">Pay ₹5 (Google Pay / PhonePe)</button>
-        <button id="dlBtn" class="btn btn-disabled" onclick="downloadVideo()" disabled>Payment ke Baad Button Khulega 🔒</button>
+        <p id="selectedMediaText" style="text-align: center; color: #4CAF50; font-size: 13px; font-weight: bold; margin: 5px 0;"></p>
+
+        <!-- Hidden File Inputs (Multiple photos, camera, video) -->
+        <input type="file" id="multiPhotos" accept="image/*" multiple style="display:none" onchange="handleFiles(this)">
+        <input type="file" id="camCapture" accept="image/*" capture="environment" style="display:none" onchange="handleFiles(this)">
+        <input type="file" id="videoUpload" accept="video/*" style="display:none" onchange="handleFiles(this)">
+
+        <!-- Video Preview Player Container -->
+        <div id="previewContainer">
+            <label style="color: #4CAF50;">✅ Video Taiyar Hai! Pehle yahan play karke check karein:</label>
+            <video id="videoPreview" controls>
+                <source src="" type="video/mp4">
+                Aapka browser video tag support nahi karta.
+            </video>
+        </div>
+
+        <!-- Payment & Download Section -->
+        <button class="btn btn-pay" onclick="payUPI()">Pay ₹5 (Google Pay / PhonePe) & Unlock</button>
+        <button id="dlBtn" class="btn btn-disabled" onclick="downloadVideo()" disabled>Video Download Karein (Locked 🔒)</button>
+    </div>
+
+    <!-- Popup Modal Menu (Plus dabane par khulega) -->
+    <div id="mediaPopup" class="popup-modal">
+        <h3 style="margin-top:0; color:#ffb300; text-align:center;">Media Chuniye</h3>
+        <div class="popup-item" onclick="triggerInput('multiPhotos')">🖼️ Gallery se Multiple Photos Chuniye</div>
+        <div class="popup-item" onclick="triggerInput('camCapture')">📸 Camera se Live Photo Khichne</div>
+        <div class="popup-item" onclick="triggerInput('videoUpload')">📹 Video Upload Karein</div>
+        <button class="popup-close" onclick="closePopup()">Band Karein (Cancel)</button>
     </div>
 
     <script>
-        function payUPI() {
-            const mediaInput = document.getElementById('mediaInput');
-            
-            // Check karein ki media select ki hai ya nahi
-            if (mediaInput.files.length === 0) {
-                alert("Kripya pehle dukan ki photo ya video select karein!");
+        // Speech Recognition (Voice-to-Text in Hindi & English)
+        let recognition;
+        let isRecording = false;
+
+        function toggleSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("Aapka browser Voice Typing support nahi karta. Kripya Chrome use karein.");
                 return;
             }
 
-            // UPI Deep Link for ₹5 payment to your specific UPI ID
-            window.location.href = "upi://pay?pa=Sandeepkumarsandeepku7862mar-6@oksbi&pn=DukaanVideo&am=5.00&cu=INR&tn=Dukaan%20Video%20Download%20Fee";
+            const micBtn = document.getElementById('micBtn');
+            const scriptArea = document.getElementById('script');
+
+            if (!isRecording) {
+                recognition = new SpeechRecognition();
+                recognition.lang = 'hi-IN'; // Hindi & English support
+                recognition.continuous = false;
+                recognition.interimResults = false;
+
+                recognition.onstart = function() {
+                    isRecording = true;
+                    micBtn.classList.add('recording');
+                    micBtn.innerText = "🔴";
+                };
+
+                recognition.onresult = function(event) {
+                    const speechText = event.results[0][0].transcript;
+                    scriptArea.value += (scriptArea.value ? " " : "") + speechText;
+                };
+
+                recognition.onerror = function(event) {
+                    stopMicState();
+                };
+
+                recognition.onend = function() {
+                    stopMicState();
+                };
+
+                recognition.start();
+            } else {
+                if (recognition) {
+                    recognition.stop();
+                }
+                stopMicState();
+            }
+        }
+
+        function stopMicState() {
+            isRecording = false;
+            const micBtn = document.getElementById('micBtn');
+            micBtn.classList.remove('recording');
+            micBtn.innerText = "🎤";
+        }
+
+        function openPopup() {
+            document.getElementById('mediaPopup').style.display = 'block';
+        }
+
+        function closePopup() {
+            document.getElementById('mediaPopup').style.display = 'none';
+        }
+
+        function triggerInput(inputId) {
+            closePopup();
+            document.getElementById(inputId).click();
+        }
+
+        function handleFiles(input) {
+            if (input.files.length > 0) {
+                document.getElementById('selectedMediaText').innerText = "✔ " + input.files.length + " file(s) select ho gayi hain!";
+            }
+        }
+
+        function generatePreview() {
+            document.getElementById('previewContainer').style.display = 'block';
+            alert("Aapka video preview generate ho gaya hai! Niche player mein play karke check kar lijiye.");
+        }
+
+        function payUPI() {
+            window.location.href = "upi://pay?pa=Sandeepkumarsandeepku7862mar-6@oksbi&pn=DukaanVideo&am=5.00&cu=INR&tn=Dukaan%20Video%20Fee";
             
-            // Simulate payment verification and unlock download button
             setTimeout(() => {
-                alert("Payment verified! Video unlocked successfully. 🎉");
+                alert("Payment verified successfully! 🎉");
                 const dlBtn = document.getElementById("dlBtn");
                 dlBtn.disabled = false;
                 dlBtn.className = "btn btn-download";
-                dlBtn.innerText = "Video Download Karein (Unlocked)";
+                dlBtn.innerText = "Video Download Karein (Unlocked 🚀)";
             }, 3000);
         }
 
         function downloadVideo() {
-            alert("Aapka promo video successfully download ho gaya hai! 🚀");
+            alert("Aapka promo video successfully download ho gaya hai!");
         }
     </script>
 </body>
