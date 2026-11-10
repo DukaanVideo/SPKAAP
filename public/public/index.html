@@ -354,7 +354,6 @@
                     let reader = new FileReader();
 
                     reader.onload = function(e) {
-                        // Display thumbnail on screen
                         let imgThumb = document.createElement('img');
                         imgThumb.src = e.target.result;
                         imgThumb.style.width = "50px";
@@ -364,7 +363,6 @@
                         imgThumb.style.border = "1px solid #ffcc00";
                         previewContainer.appendChild(imgThumb);
 
-                        // Save Image Object for Video Generation
                         let imgObj = new Image();
                         imgObj.src = e.target.result;
                         uploadedImageObjects.push(imgObj);
@@ -430,7 +428,7 @@
             recorder.start();
 
             let frameCount = 0;
-            const totalFrames = 150; // ~5 seconds video for smooth slideshow
+            const totalFrames = 150;
 
             function drawFrame() {
                 let grad = ctx.createLinearGradient(0, 0, 0, 1280);
@@ -444,7 +442,6 @@
                 ctx.textAlign = "center";
                 ctx.fillText("❤️ SAPNA PURA KARENGE (SPK)", 360, 90);
 
-                // Multiple Photos Slideshow Logic inside Video
                 if (uploadedImageObjects.length > 0) {
                     let imgIndex = Math.floor(frameCount / 30) % uploadedImageObjects.length;
                     let activeImg = uploadedImageObjects[imgIndex];
@@ -459,7 +456,6 @@
                     ctx.fillText("(No Image Uploaded)", 360, 400);
                 }
 
-                // Script Box
                 ctx.fillStyle = "#1a233a";
                 ctx.fillRect(50, 680, 620, 480);
                 ctx.strokeStyle = "#ffcc00";
@@ -488,6 +484,7 @@
                 }
                 ctx.fillText(line, 90, y);
 
+Names:
                 frameCount++;
                 if (frameCount < totalFrames) {
                     requestAnimationFrame(drawFrame);
