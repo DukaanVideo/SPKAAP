@@ -11,7 +11,7 @@ OUTPUT_FOLDER = os.path.join(BASE_DIR, 'outputs')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
-# Shandar HTML Interface with Working Backend Fetch
+# Shandar HTML Interface with Working Backend Fetch & All Features
 HTML_PAGE = """
 <!DOCTYPE html>
 <html lang="hi">
@@ -22,7 +22,7 @@ HTML_PAGE = """
     <style>
         body { font-family: Arial, sans-serif; background: #121212; margin: 0; padding: 16px; color: #fff; }
         .hero-banner { 
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), #222; 
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('1794349634770.png'); 
             background-size: cover; background-position: center; 
             padding: 40px 20px; border-radius: 12px; text-align: center; 
             border: 2px solid #ffb300; box-shadow: 0 8px 20px rgba(255,179,0,0.3); margin-bottom: 16px;
@@ -30,7 +30,7 @@ HTML_PAGE = """
         .card { background: #1e1e1e; padding: 16px; margin-top: 16px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 1px solid #333; }
         select { width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 16px; background: #2c2c2c; color: #fff; border: 1px solid #555; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
         label { color: #ffb300; font-weight: bold; font-size: 14px; display: block; margin-top: 10px; }
-        .chat-input-bar { display: flex; align-items: center; background: #2c2c2c; border: 1px solid #555; border-radius: 30px; padding: 10px 14px; margin-top: 8px; margin-bottom: 16px; gap: 10px; }
+        .chat-input-bar { display: flex; align-items: center; background: #2c2c2c; border: 1px solid #555; border-radius: 30px; padding: 10px 14px; margin-top: 8px; margin-bottom: 16px; gap: 10px; position: relative; }
         .chat-input-bar textarea { flex: 1; background: transparent; border: none; color: #fff; resize: none; font-size: 16px; outline: none; height: 32px; max-height: 100px; padding: 2px 0; margin: 0; }
         .icon-btn { background: transparent; border: none; cursor: pointer; font-size: 22px; display: flex; align-items: center; justify-content: center; padding: 5px; color: #ffb300; }
         .btn-send { background: #2196F3; color: white; width: 38px; height: 38px; border-radius: 50%; border: none; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
@@ -45,6 +45,7 @@ HTML_PAGE = """
         .btn-disabled { background: #555; color: #aaa; cursor: not-allowed; }
         #previewContainer { display: none; text-align: center; margin-top: 15px; }
         video { width: 100%; border-radius: 8px; margin-top: 10px; border: 1px solid #555; }
+        .upi-info { background: #2c2c2c; padding: 10px; border-radius: 8px; margin-top: 10px; text-align: center; font-size: 13px; color: #ffb300; word-break: break-all; border: 1px dashed #555; }
     </style>
 </head>
 <body>
@@ -52,6 +53,13 @@ HTML_PAGE = """
         <h2 style="margin:0; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">🎥 DukaanVideo Studio</h2>
         <p style="margin:5px 0 0 0; font-size: 14px; color: #ffd54f;">Apni Dukan, Dairy ya Gaming ke liye Shandar Video banayein!</p>
     </div>
+
+    <!-- App Icon / Character Profile Indicator -->
+    <div class="card" style="text-align: center; padding: 10px;">
+        <p style="color: #aaa; font-size: 12px; margin: 0 0 5px 0;">App Icon / Character Profile</p>
+        <img src="4eab94c04804ace625815663904f3ff6.jpg" alt="Gaming Character" style="width: 70px; height: 70px; border-radius: 50%; border: 2px solid #ffb300; object-fit: cover;">
+    </div>
+
     <div class="card">
         <label>1. Apna Business ya Game Category Chuniye:</label>
         <select id="category">
@@ -70,11 +78,11 @@ HTML_PAGE = """
             <option>Meri Apni Aawaz (Voice Clone)</option>
         </select>
 
-        <label>3. Background Music Chuniye:</label>
+        <label>3. Background Music Chuniye (Aapki Marzi):</label>
         <select id="bgMusic">
-            <option value="none">🚫 No Music</option>
-            <option value="upbeat">Upbeat Promotional Beat</option>
-            <option value="gaming">Gaming Action Remix</option>
+            <option value="none">🚫 No Music (Music Nahi Chahiye)</option>
+            <option value="upbeat">🎵 Upbeat Promotional Beat</option>
+            <option value="gaming">🎮 Gaming Action Remix</option>
         </select>
 
         <label>4. Video ki Script / Offer Likhein ya Bol kar Type Karein:</label>
@@ -99,6 +107,9 @@ HTML_PAGE = """
         </div>
 
         <button class="btn btn-pay" onclick="payUPI()">Pay ₹5 & Unlock Download</button>
+        <div class="upi-info">
+            UPI ID: <b>Sandeepkumarsandeepku7862mar-6@oksbi</b>
+        </div>
         <button id="dlBtn" class="btn btn-disabled" onclick="downloadVideo()" disabled>Video Download Karein (Locked 🔒)</button>
     </div>
 
@@ -137,7 +148,7 @@ HTML_PAGE = """
         function openPopup() { document.getElementById('mediaPopup').style.display = 'block'; }
         function closePopup() { document.getElementById('mediaPopup').style.display = 'none'; }
         function triggerInput(inputId) { closePopup(); document.getElementById(inputId).click(); }
-        function handleFiles(input) { if (input.files.length > 0) { document.getElementById('selectedMediaText'].innerText = "✔ " + input.files.length + " file(s) select ho gayi hain!"; } }
+        function handleFiles(input) { if (input.files.length > 0) { document.getElementById('selectedMediaText').innerText = "✔ " + input.files.length + " file(s) select ho gayi hain!"; } }
         
         function generatePreview() {
             const scriptText = document.getElementById('script').value;
@@ -202,10 +213,9 @@ def verify_and_generate():
         output_filename = 'dukaan_promo.mp4'
         output_video_path = os.path.join(OUTPUT_FOLDER, output_filename)
         
-        # Agar file nahi hai toh ek dummy file ya blank video generate karne ka logic ya touch kar sakte hain
         if not os.path.exists(output_video_path):
             with open(output_video_path, 'wb') as f:
-                f.write(b'dummy video content') # Real video generation command yahan add kar sakte hain
+                f.write(b'dummy video content')
 
         return jsonify({
             'status': 'Success', 
