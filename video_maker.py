@@ -13,7 +13,7 @@ os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
 @app.route('/')
 def home():
-    # Yeh seedha aapke 'templates' folder ke andar rakhi index.html ko utha lega
+    # Yeh templates folder ke andar ki index.html ko load karega
     return render_template('index.html')
 
 @app.route('/verify-and-generate', methods=['POST'])
