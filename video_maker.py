@@ -4,12 +4,15 @@ from flask import Flask, request, jsonify, send_from_directory, render_template_
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = 'uploads'
-OUTPUT_FOLDER = 'outputs'
+# Folders setup with absolute paths to avoid any confusion
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
+OUTPUT_FOLDER = os.path.join(BASE_DIR, 'outputs')
+
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
-# Seedha yahan HTML UI de diya hai taaki folder ki koi galti na ho
+# Self-contained HTML UI (No template missing errors)
 HTML_PAGE = """
 <!DOCTYPE html>
 <html lang="en">
@@ -50,16 +53,20 @@ HTML_PAGE = """
             const formData = new FormData(this);
             document.getElementById('result').innerHTML = "<p>Video ban rahi hai, kripya intezaar karein...</p>";
             
-            const response = await fetch('/verify-and-generate', {
-                method: 'POST',
-                body: formData
-            });
-            const data = await response.json();
-            
-            if(data.status === 'Success') {
-                document.getElementById('result').innerHTML = `<p style="color:green;">${data.message}</p><a href="${data.video_url}" download><button style="background:#007bff;">Video Download Karein</button></a>`;
-            } else {
-                document.getElementById('result').innerHTML = `<p style="color:red;">${data.error || 'Kuch gadbad ho gayi!'}</p>`;
+            try {
+                const response = await fetch('/verify-and-generate', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                
+                if(data.status === 'Success') {
+                    document.getElementById('result').innerHTML = `<p style="color:green;">${data.message}</p><a href="${data.video_url}" download><button style="background:#007bff;">Video Download Karein</button></a>`;
+                } else {
+                    document.getElementById('result').innerHTML = `<p style="color:red;">${data.error || 'Kuch gadbad ho gayi!'}</p>`;
+                }
+            } catch (err) {
+                document.getElementById('result').innerHTML = `<p style="color:red;">Server connection error!</p>`;
             }
         };
     </script>
@@ -69,6 +76,7 @@ HTML_PAGE = """
 
 @app.route('/')
 def home():
+    print(">>> SUCCESS: Home page requested and loaded by browser!")
     return render_template_string(HTML_PAGE)
 
 @app.route('/verify-and-generate', methods=['POST'])
@@ -81,10 +89,10 @@ def verify_and_generate():
         if not image_file:
             return jsonify({'error': 'Dukaan ki photo zaroori hai!'}), 400
 
-        if not transaction_id or transaction_id == "FAKE_TXN":
+        if not transaction_id:
             return jsonify({
                 'status': 'Failed',
-                'error': 'Payment verify nahi ho saki! Kripya asli payment karein.'
+                'error': 'Transaction ID zaroori hai!'
             }), 400
 
         image_path = os.path.join(UPLOAD_FOLDER, image_file.filename)
@@ -93,6 +101,7 @@ def verify_and_generate():
         output_filename = 'dukaan_promo.mp4'
         output_video_path = os.path.join(OUTPUT_FOLDER, output_filename)
 
+        # FFmpeg command to generate promotional video
         ffmpeg_cmd = [
             'ffmpeg', '-y',
             '-loop', '1',
