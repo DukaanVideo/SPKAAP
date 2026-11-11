@@ -11,7 +11,6 @@ OUTPUT_FOLDER = os.path.join(BASE_DIR, 'outputs')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
-# Aapka poora HTML code yahan seedha embed hai, ab kisi folder ki zaroorat nahi!
 HTML_PAGE = """
 <!DOCTYPE html>
 <html lang="hi">
@@ -21,12 +20,7 @@ HTML_PAGE = """
     <title>DukaanVideo - Local Promo Maker</title>
     <style>
         body { font-family: Arial, sans-serif; background: #121212; margin: 0; padding: 16px; color: #fff; }
-        .hero-banner { 
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('1794349634770.png'); 
-            background-size: cover; background-position: center; 
-            padding: 50px 20px; border-radius: 12px; text-align: center; 
-            border: 2px solid #ffb300; box-shadow: 0 8px 20px rgba(255,179,0,0.3); margin-bottom: 16px;
-        }
+        .hero-banner { background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), url('1794349634770.png'); background-size: cover; background-position: center; padding: 50px 20px; border-radius: 12px; text-align: center; border: 2px solid #ffb300; box-shadow: 0 8px 20px rgba(255,179,0,0.3); margin-bottom: 16px; }
         .card { background: #1e1e1e; padding: 16px; margin-top: 16px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); border: 1px solid #333; }
         select { width: 100%; padding: 12px; margin-top: 8px; margin-bottom: 16px; background: #2c2c2c; color: #fff; border: 1px solid #555; border-radius: 8px; box-sizing: border-box; font-size: 14px; }
         label { color: #ffb300; font-weight: bold; font-size: 14px; display: block; margin-top: 10px; }
