@@ -417,14 +417,14 @@ class _ScriptScreenState extends State<ScriptScreen> {
 }
 
 // ==========================================
-// 5️⃣ SAVED VIDEOS / HISTORY SCREEN
+// 5️⃣ SAVED VIDEOS / HISTORY SCREEN (Corrected)
 // ==========================================
 class HistoryScreen extends StatelessWidget {
   const HistoryScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Type definition yahan theek kar di gayi hai (>)
+    // Correct type definition Added
     final List> savedVideos = [
       {'title': 'Doodh Dairy Promo', 'date': '26 Oct 2026', 'status': 'Downloaded (₹5 Paid)'},
       {'title': 'Mobile Store Offer', 'date': '25 Oct 2026', 'status': 'Downloaded (₹5 Paid)'},
@@ -454,7 +454,7 @@ class HistoryScreen extends StatelessWidget {
                     leading: const Icon(Icons.video_library, color: Colors.amberAccent, size: 35),
                     title: Text(
                       savedVideos[index]['title']!,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: constTextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     subtitle: Text(
                       "Tarikh: ${savedVideos[index]['date']}\nStatus: ${savedVideos[index]['status']}",
